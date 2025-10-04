@@ -8,7 +8,7 @@ export default function Header() {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
 
   return (
-    <header className="bg-gradient-to-r from-[#7A0000] to-[#A01010] text-white sticky top-0 z-50 shadow-xl border-b border-white/10">
+    <header className="bg-gradient-to-r from-[#7A0000] to-[#A01010] text-white top-0 z-50 shadow-xl border-b border-white/10">
       <div className="max-w-[1400px] mx-auto px-8 lg:px-16">
         <div className="flex justify-between items-center py-4">
           {/* Logo with Text Below - Left Side */}
@@ -37,33 +37,33 @@ export default function Header() {
               <li className="group">
                 <Link href="#about" className="font-poppins text-lg font-light text-white/95 hover:text-white transition-all flex items-center gap-1.5 group-hover:scale-105 transform duration-200">
                   About Us
-                  <svg className="w-4 h-4 opacity-75 group-hover:opacity-100 transition-opacity" fill="currentColor" viewBox="0 0 20 20">
+                  {/* <svg className="w-4 h-4 opacity-75 group-hover:opacity-100 transition-opacity" fill="currentColor" viewBox="0 0 20 20">
                     <path fillRule="evenodd" d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z" clipRule="evenodd" />
-                  </svg>
+                  </svg> */}
                 </Link>
               </li>
               <li className="group">
                 <Link href="#leadership" className="font-poppins text-lg font-light text-white/95 hover:text-white transition-all flex items-center gap-1.5 group-hover:scale-105 transform duration-200">
                   Leadership
-                  <svg className="w-4 h-4 opacity-75 group-hover:opacity-100 transition-opacity" fill="currentColor" viewBox="0 0 20 20">
+                  {/* <svg className="w-4 h-4 opacity-75 group-hover:opacity-100 transition-opacity" fill="currentColor" viewBox="0 0 20 20">
                     <path fillRule="evenodd" d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z" clipRule="evenodd" />
-                  </svg>
+                  </svg> */}
                 </Link>
               </li>
               <li className="group">
                 <Link href="#galleries" className="font-poppins text-lg font-light text-white/95 hover:text-white transition-all flex items-center gap-1.5 group-hover:scale-105 transform duration-200">
                   Galleries
-                  <svg className="w-4 h-4 opacity-75 group-hover:opacity-100 transition-opacity" fill="currentColor" viewBox="0 0 20 20">
+                  {/* <svg className="w-4 h-4 opacity-75 group-hover:opacity-100 transition-opacity" fill="currentColor" viewBox="0 0 20 20">
                     <path fillRule="evenodd" d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z" clipRule="evenodd" />
-                  </svg>
+                  </svg> */}
                 </Link>
               </li>
               <li className="group">
                 <Link href="#events" className="font-poppins text-lg font-light text-white/95 hover:text-white transition-all flex items-center gap-1.5 group-hover:scale-105 transform duration-200">
                   Events
-                  <svg className="w-4 h-4 opacity-75 group-hover:opacity-100 transition-opacity" fill="currentColor" viewBox="0 0 20 20">
+                  {/* <svg className="w-4 h-4 opacity-75 group-hover:opacity-100 transition-opacity" fill="currentColor" viewBox="0 0 20 20">
                     <path fillRule="evenodd" d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z" clipRule="evenodd" />
-                  </svg>
+                  </svg> */}
                 </Link>
               </li>
             </ul>
