@@ -7,7 +7,8 @@
     "dev": "next dev",
     "build": "next build",
     "start": "next start",
-    "lint": "next lint"
+    "lint": "next lint",
+    "db:seed": "prisma db seed"
   },
   "repository": {
     "type": "git",
@@ -22,6 +23,7 @@
   },
   "homepage": "https://github.com/Clyde0513/kapwa-codefest-2025--thinking-of-a-name-rn-#readme",
   "dependencies": {
+    "@prisma/client": "^6.16.3",
     "@sanity/icons": "^3.7.4",
     "@sanity/image-url": "^1.2.0",
     "@sanity/vision": "^4.10.2",
@@ -41,7 +43,9 @@
     "eslint": "^9.37.0",
     "eslint-config-next": "^15.5.4",
     "postcss": "^8.5.6",
+    "prisma": "^6.16.3",
     "tailwindcss": "^4.1.14",
     "typescript": "5.9.3"
-  }
+  },
+  "prisma": { "seed": "node prisma/seed.mjs" }
 }

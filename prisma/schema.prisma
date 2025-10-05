@@ -1,0 +1,93 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+// Looking for ways to speed up your queries, or scale easily with your serverless or edge functions?
+// Try Prisma Accelerate: https://pris.ly/cli/accelerate-init
+
+// prisma/schema.prisma
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+  directUrl = env("DIRECT_URL")
+}
+
+// ---- Core models (v1) ----
+
+model User {
+  id        String   @id @default(uuid())
+  email     String?  @unique
+  name      String?
+  image     String?
+  createdAt DateTime @default(now())
+
+  // relations
+  posts     Post[]
+  comments  Comment[]
+  events    Event[]  @relation("EventCreator")
+}
+
+model Post {
+  id          String    @id @default(uuid())
+  authorId    String?
+  author      User?     @relation(fields: [authorId], references: [id])
+  title       String
+  content     String    // markdown or plain text
+  published   Boolean   @default(true)
+  // denormalized counters you can maintain later if you want speed:
+  // commentCount Int @default(0)
+  // likeCount    Int @default(0)
+
+  createdAt   DateTime  @default(now())
+  updatedAt   DateTime  @updatedAt
+
+  comments    Comment[]
+
+  @@index([authorId])
+  @@index([createdAt])
+}
+
+model Comment {
+  id         String    @id @default(uuid())
+  postId     String
+  post       Post      @relation(fields: [postId], references: [id])
+  authorId   String?
+  author     User?     @relation(fields: [authorId], references: [id])
+  content    String
+  parentId   String?   // for threaded replies (optional)
+  createdAt  DateTime  @default(now())
+  updatedAt  DateTime  @updatedAt
+
+  // self-relation for nesting
+  parent     Comment?  @relation("CommentToReplies", fields: [parentId], references: [id])
+  replies    Comment[] @relation("CommentToReplies")
+
+  @@index([postId, createdAt])
+  @@index([parentId])
+}
+
+model Event {
+  id             String   @id @default(uuid())
+  title          String
+  description    String?
+  startsAt       DateTime
+  endsAt         DateTime
+  allDay         Boolean  @default(false)
+  location       String?
+  url            String?  // link to external event page or ticketing
+  createdById    String?
+  createdBy      User?    @relation("EventCreator", fields: [createdById], references: [id])
+
+  // Optional Google Calendar mapping for later sync
+  gcalEventId    String?
+  gcalCalendarId String?
+
+  createdAt      DateTime @default(now())
+  updatedAt      DateTime @updatedAt
+
+  @@index([startsAt])
+  @@index([createdById])
+}
