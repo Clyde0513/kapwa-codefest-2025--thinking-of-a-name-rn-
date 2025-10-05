@@ -181,7 +181,7 @@ export default async function AdminDashboard() {
                 </div>
                 <div className="ml-3">
                   <p className="font-medium text-gray-900">New Blog Post</p>
-                  <p className="text-sm text-gray-500">Create rich content with images</p>
+                  <p className="text-sm text-gray-500">Create rich content</p>
                 </div>
               </Link>
 
