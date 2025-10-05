@@ -112,8 +112,8 @@ export default function MissionPage() {
                 <p className="font-poppins text-lg text-gray-700 leading-relaxed">
                   Represents our Christian identity as Asians. The bamboo also symbolizes strength, 
                   and flexibility even in the midst of trials, sufferings, and other adversities. 
-                  As one Chinese actor expressed "Notice that the stiffest tree is most easily cracked, 
-                  while the bamboo survives by bending with the wind". It symbolizes our resiliency as Filipinos.
+                  As one Chinese actor expressed &ldquo;Notice that the stiffest tree is most easily cracked, 
+                  while the bamboo survives by bending with the wind&rdquo;. It symbolizes our resiliency as Filipinos.
                 </p>
               </div>
 
