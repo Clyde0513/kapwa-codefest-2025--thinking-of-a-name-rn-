@@ -7,6 +7,7 @@ import BlogList from './components/BlogList';
 import Galleries from './components/Galleries';
 import Resources from './components/Resources';
 import Footer from './components/Footer';
+import EventsCalendar from './components/EventsCalendar';
 
 export default function Home() {
   return (
@@ -25,6 +26,7 @@ export default function Home() {
       </div>
       </section>
       <Events />
+      <EventsCalendar />
       <MassSchedule />
       <Leadership />
       <Galleries />

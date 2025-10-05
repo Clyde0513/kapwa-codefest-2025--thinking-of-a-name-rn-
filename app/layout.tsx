@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import { Inter, Poppins } from "next/font/google";
 import "./globals.css";
+import Head from 'next/head';
 
 const inter = Inter({ 
   subsets: ["latin"],
@@ -27,6 +28,12 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en">
+      <Head>
+        {/* FullCalendar CDN CSS (avoids importing package css with limited exports) */}
+        <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fullcalendar/common@6.1.4/main.min.css" />
+        <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fullcalendar/daygrid@6.1.4/main.min.css" />
+        <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fullcalendar/timegrid@6.1.4/main.min.css" />
+      </Head>
       <body className={`${inter.variable} ${poppins.variable} font-inter antialiased`}>
         {children}
       </body>
