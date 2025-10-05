@@ -142,3 +142,14 @@ Setup steps:
 6. Visit `/blog` to see the list of posts once you have published posts in Sanity Studio.
 
 The Next.js demo uses GROQ queries and `next-sanity` for fetching content. The demo pages are server components using ISR (`revalidate`) so published posts appear shortly after you publish.
+
+FullCalendar
+------------
+
+This project includes a demo `EventsCalendar` component using FullCalendar. To enable it, install the following packages:
+
+```
+npm install @fullcalendar/react @fullcalendar/daygrid @fullcalendar/timegrid @fullcalendar/interaction
+```
+
+The calendar component is a client component and will appear once the packages are installed. You can then embed `<EventsCalendar />` where needed.

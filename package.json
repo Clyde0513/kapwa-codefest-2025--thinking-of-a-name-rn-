@@ -24,18 +24,24 @@
   },
   "homepage": "https://github.com/Clyde0513/kapwa-codefest-2025--thinking-of-a-name-rn-#readme",
   "dependencies": {
+    "@fullcalendar/common": "^5.11.5",
+    "@fullcalendar/daygrid": "^6.1.19",
+    "@fullcalendar/interaction": "^6.1.19",
+    "@fullcalendar/react": "^6.1.19",
+    "@fullcalendar/timegrid": "^6.1.19",
     "@prisma/client": "^6.16.3",
     "@sanity/icons": "^3.7.4",
     "@sanity/image-url": "^1.2.0",
     "@sanity/vision": "^4.10.2",
     "cloudinary": "^2.7.0",
+    "fullcalendar": "^6.1.19",
     "next": "^15.5.4",
     "next-sanity": "^11.4.2",
     "react": "^19.2.0",
     "react-dom": "^19.2.0",
     "sanity": "^4.10.2",
     "styled-components": "^6.1.19",
-    "zod": "^4.1.11"
+    "zod": "^3.22.4"
   },
   "devDependencies": {
     "@tailwindcss/postcss": "^4.1.14",
