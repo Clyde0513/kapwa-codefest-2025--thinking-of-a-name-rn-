@@ -18,7 +18,7 @@ const poppins = Poppins({
 
 export const metadata: Metadata = {
   title: "Filipino Apostolate of Boston",
-  description: "A Christian Community who guides, takes care, and nourishes the faith life of our young people, and our fellow Filipinos in the Archdiocese of Boston.",
+  description: "A Christian, Catholic Community who guides, takes care, and nourishes the faith life of our young people, and our fellow Filipinos in the Archdiocese of Boston.",
 };
 
 export default function RootLayout({
