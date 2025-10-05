@@ -89,18 +89,24 @@ async function handleResourceCreated(payload: CloudinaryWebhookPayload) {
   // Update photo record with final dimensions and metadata
   // This is useful when eager transformations are configured
   try {
-    await prisma.photo.updateMany({
-      where: { publicId: payload.public_id },
-      data: {
-        width: payload.width || undefined,
-        height: payload.height || undefined,
-        format: payload.format || undefined,
-        bytes: payload.bytes || undefined,
-        url: payload.secure_url || undefined,
-      },
-    });
+    // Build update object with only defined values
+    const updateData: any = {};
     
-    console.log('Updated photo metadata for:', payload.public_id);
+    if (payload.width) updateData.width = payload.width;
+    if (payload.height) updateData.height = payload.height;
+    if (payload.format) updateData.format = payload.format;
+    if (payload.bytes) updateData.bytes = payload.bytes;
+    if (payload.secure_url) updateData.url = payload.secure_url;
+    
+    // Only update if we have data to update
+    if (Object.keys(updateData).length > 0) {
+      await prisma.photo.updateMany({
+        where: { publicId: payload.public_id },
+        data: updateData,
+      });
+      
+      console.log('Updated photo metadata for:', payload.public_id);
+    }
   } catch (error) {
     console.error('Failed to update photo metadata:', error);
   }

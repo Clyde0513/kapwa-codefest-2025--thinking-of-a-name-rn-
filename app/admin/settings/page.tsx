@@ -115,7 +115,7 @@ export default function WebsiteSettingsPage() {
           <div className="bg-white rounded-lg shadow-sm border">
             <div className="p-6 border-b">
               <h2 className="text-lg font-semibold text-gray-900">Basic Information</h2>
-              <p className="text-gray-600 mt-1">Your church's name and basic details</p>
+              <p className="text-gray-600 mt-1">Your church&apos;s name and basic details</p>
             </div>
             <div className="p-6 space-y-6">
               <div>
