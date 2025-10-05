@@ -1,7 +1,12 @@
 'use client';
 
 import Image from 'next/image';
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
+
+interface Settings {
+  eventsTitle?: string;
+  eventsSubtitle?: string;
+}
 
 interface Event {
   id: number;
@@ -69,17 +74,42 @@ const events: Event[] = [
 
 export default function Events() {
   const [selectedEvent, setSelectedEvent] = useState<Event | null>(null);
+  const [settings, setSettings] = useState<Settings | null>(null);
+
+  useEffect(() => {
+    const fetchSettings = async () => {
+      try {
+        const response = await fetch('/api/settings');
+        const data = await response.json();
+        if (response.ok) {
+          setSettings(data.settings);
+        }
+      } catch (error) {
+        console.error('Error fetching settings:', error);
+      }
+    };
+
+    fetchSettings();
+  }, []);
+
+  // Fallback values
+  const title = settings?.eventsTitle || 'EVENTS';
+  const subtitle = settings?.eventsSubtitle || 'Our faith community provides many opportunities to fellowship with each other.\nHere are just a few of our upcoming events!';
 
   return (
     <section id="events" className="py-20 px-4" style={{ backgroundColor: '#FFFDD0' }}>
       <div className="max-w-7xl mx-auto">
         <h2 className="text-4xl font-poppins font-bold text-gray-900 text-center mb-4">
-          EVENTS
+          {title}
         </h2>
         
         <p className="text-center text-gray-900 text-lg mb-12 max-w-3xl mx-auto font-bold">
-          Our faith community provides many opportunities to fellowship with each other.<br />
-          Here are just a few of our upcoming events!
+          {subtitle.split('\n').map((line, index) => (
+            <span key={index}>
+              {line}
+              {index < subtitle.split('\n').length - 1 && <br />}
+            </span>
+          ))}
         </p>
         
         <div className="grid grid-cols-1 md:grid-cols-2 gap-8 max-w-5xl mx-auto">

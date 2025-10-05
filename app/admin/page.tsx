@@ -11,20 +11,26 @@ export default async function AdminDashboard() {
   let upcomingEvents: any[] = [];
 
   try {
-    // Get Sanity blog posts
-    const sanityPosts = await sanityClient.fetch(`
-      *[_type == "post"] | order(publishedAt desc) {
-        _id,
-        title,
-        slug,
-        publishedAt,
-        excerpt,
-        "authorName": author->name
-      }
-    `).catch(() => []);
+    // Get database blog posts
+    const dbPosts = await db.findManyPosts({
+      where: { published: true },
+      take: 5,
+      orderBy: { createdAt: 'desc' },
+      include: {
+        author: {
+          select: { name: true, email: true },
+        },
+      },
+    }).catch(() => []);
     
-    blogPostsCount = sanityPosts.length;
-    recentBlogPosts = sanityPosts.slice(0, 5);
+    blogPostsCount = await db.countPosts({ where: { published: true } }).catch(() => 0);
+    recentBlogPosts = dbPosts.map((post: any) => ({
+      _id: post.id,
+      id: post.id,
+      title: post.title,
+      publishedAt: post.createdAt,
+      authorName: post.author?.name || 'Church Staff'
+    }));
 
     // Get database stats
     const [eventsResult, photosResult] = await Promise.all([
@@ -142,8 +148,7 @@ export default async function AdminDashboard() {
           <div className="p-6">
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
               <Link
-                href="https://b4h3ckxo.sanity.studio/"
-                target="_blank"
+                href="/admin/posts/new"
                 className="flex items-center p-4 border border-gray-200 rounded-lg hover:bg-gray-50 transition-colors group"
               >
                 <div className="p-2 bg-blue-100 rounded-lg group-hover:bg-blue-200 transition-colors">
@@ -158,7 +163,7 @@ export default async function AdminDashboard() {
               </Link>
 
               <Link
-                href="/admin/blog"
+                href="/admin/posts"
                 className="flex items-center p-4 border border-gray-200 rounded-lg hover:bg-gray-50 transition-colors group"
               >
                 <div className="p-2 bg-purple-100 rounded-lg group-hover:bg-purple-200 transition-colors">
@@ -228,7 +233,7 @@ export default async function AdminDashboard() {
             <div className="p-6 border-b">
               <div className="flex items-center justify-between">
                 <h3 className="text-lg font-semibold text-gray-900">Recent Blog Posts</h3>
-                <Link href="/admin/blog" className="text-blue-600 hover:text-blue-700 text-sm font-medium">
+                <Link href="/admin/posts" className="text-blue-600 hover:text-blue-700 text-sm font-medium">
                   Manage All
                 </Link>
               </div>
@@ -239,8 +244,7 @@ export default async function AdminDashboard() {
                   <div className="text-center py-4">
                     <p className="text-gray-500 text-sm mb-2">No blog posts found</p>
                     <Link 
-                      href="/studio" 
-                      target="_blank"
+                      href="/admin/posts/new" 
                       className="text-blue-600 hover:text-blue-700 text-sm font-medium"
                     >
                       Create your first blog post →
@@ -264,8 +268,7 @@ export default async function AdminDashboard() {
                       </div>
                       <div className="flex-shrink-0">
                       <Link
-                        href={`https://b4h3ckxo.sanity.studio/desk/post;${post._id}`}
-                        target="_blank"
+                        href={`/admin/posts/${post.id}/edit`}
                         className="text-blue-600 hover:text-blue-700 text-sm font-medium"
                       >
                         Edit

@@ -1,21 +1,18 @@
 import Header from '../components/Header';
-import { sanityClient } from '../../lib/sanityClient';
+import { prisma } from '../../lib/prisma';
 import Link from 'next/link';
 
 export default async function BlogPage() {
-  // Fetch posts from Sanity CMS
-  const posts = await sanityClient.fetch(`
-    *[_type == "post"] | order(publishedAt desc) {
-      _id,
-      title,
-      slug,
-      publishedAt,
-      excerpt,
-      "authorName": author->name,
-      "mainImage": mainImage.asset->url,
-      "previewText": pt::text(body)
-    }
-  `);
+  // Fetch posts from database
+  const posts = await prisma.post.findMany({
+    where: { published: true },
+    orderBy: { createdAt: 'desc' },
+    include: {
+      author: {
+        select: { name: true, email: true },
+      },
+    },
+  });
 
   return (
     <main className="min-h-screen bg-white">
@@ -26,54 +23,46 @@ export default async function BlogPage() {
         
         {posts.length === 0 ? (
           <div className="text-center py-12">
-            <p className="text-gray-600">No posts found. Create your first post in the Sanity Studio!</p>
+            <p className="text-gray-600">No posts found. Check back soon for updates from our church community!</p>
             <Link 
-              href="/studio" 
+              href="/admin/posts/new" 
               className="inline-block mt-4 bg-blue-600 text-white px-6 py-2 rounded-lg hover:bg-blue-700"
             >
-              Open Sanity Studio
+              Create First Post
             </Link>
           </div>
         ) : (
           <div className="space-y-8">
-            {posts.map((post: any) => (
-              <article key={post._id} className="border-b border-gray-200 pb-8 last:border-b-0">
+            {posts.map((post) => (
+              <article key={post.id} className="border-b border-gray-200 pb-8 last:border-b-0">
                 <div className="flex flex-col md:flex-row gap-6">
-                  {post.mainImage && (
-                    <div className="md:w-64 flex-shrink-0">
-                      {/* eslint-disable-next-line @next/next/no-img-element */}
-                      <img
-                        src={post.mainImage}
-                        alt={post.title}
-                        className="w-full h-48 object-cover rounded-lg"
-                      />
-                    </div>
-                  )}
                   <div className="flex-1">
                     <h2 className="text-2xl font-semibold text-gray-900 mb-2">
-                      <a 
-                        href={`/blog/${post.slug.current}`}
+                      <Link 
+                        href={`/blog/${post.id}`}
                         className="hover:text-blue-600 transition-colors"
                       >
                         {post.title}
-                      </a>
+                      </Link>
                     </h2>
                     <div className="flex items-center gap-4 text-sm text-gray-600 mb-3">
-                      <span>{post.authorName || 'Church Staff'}</span>
+                      <span>{post.author?.name || 'Church Staff'}</span>
                       <span>•</span>
-                      <time dateTime={post.publishedAt}>
-                        {new Date(post.publishedAt).toLocaleDateString()}
+                      <time dateTime={post.createdAt.toISOString()}>
+                        {new Date(post.createdAt).toLocaleDateString()}
                       </time>
                     </div>
                     <p className="text-gray-700 leading-relaxed">
-                      {post.excerpt || post.previewText?.substring(0, 200) + '...'}
+                      {post.content.length > 300 
+                        ? `${post.content.substring(0, 300)}...` 
+                        : post.content}
                     </p>
-                    <a 
-                      href={`/blog/${post.slug.current}`}
+                    <Link 
+                      href={`/blog/${post.id}`}
                       className="inline-block mt-3 text-blue-600 hover:text-blue-700 font-medium"
                     >
                       Read more →
-                    </a>
+                    </Link>
                   </div>
                 </div>
               </article>

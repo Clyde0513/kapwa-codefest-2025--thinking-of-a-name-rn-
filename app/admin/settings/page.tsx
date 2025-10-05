@@ -4,33 +4,123 @@ import { useState, useEffect } from 'react';
 import Link from 'next/link';
 
 interface WebsiteSettings {
+  // Basic Information
   siteName: string;
   tagline: string;
+  pastorName: string;
+  
+  // Homepage Content
   heroTitle: string;
   heroSubtitle: string;
   aboutText: string;
+  
+  // Contact Information
   contactEmail: string;
   contactPhone: string;
   address: string;
   serviceTimes: string;
-  pastorName: string;
+  
+  // Mass Schedule Section
+  massScheduleTitle?: string;
+  massSchedulePeriod?: string;
+  massScheduleLocation?: string;
+  massScheduleAddress?: string;
+  massScheduleCityState?: string;
+  massScheduleAdditionalInfo?: string;
+  
+  // Leadership Section
+  leadershipTitle?: string;
+  chaplainName?: string;
+  northShoreCoordinator?: string;
+  northShoreAssistantCoordinator?: string;
+  northShoreSecretary?: string;
+  northShoreFinanceTeam?: string;
+  northShoreHeadOfLiturgy?: string;
+  northShoreFaithFormation?: string;
+  southShoreCoordinator?: string;
+  southShoreAssistantCoordinator?: string;
+  southShoreSecretary?: string;
+  southShoreFinanceTeam?: string;
+  southShoreHeadOfLiturgy?: string;
+  southShoreFaithFormation?: string;
+  financeTreasurers?: string;
+  financeAuditor?: string;
+  
+  // Events Section
+  eventsTitle?: string;
+  eventsSubtitle?: string;
+  
+  // Resources Section
+  resourcesTitle?: string;
+  resourcesSubtitle?: string;
+  resourceLinks?: Array<{ title: string; url: string }>;
 }
+
+// Default values that will be used if no settings are loaded
+const defaultSettings: WebsiteSettings = {
+    // Basic Information
+    siteName: 'Filipino Apostolate of Boston',
+    tagline: 'A Christian Community who guides, takes care, and nourishes the faith life of our young people, and our fellow Filipinos in the Archdiocese of Boston.',
+    pastorName: 'Father Peru Dayag, SVD',
+    
+    // Homepage Content
+    heroTitle: 'Welcome to Our Church Family',
+    heroSubtitle: 'Join us in faith, fellowship, and community',
+    aboutText: 'We are a welcoming community dedicated to serving God and each other. Our mission is to provide spiritual guidance and support to Filipino families in the Boston area.',
+    
+    // Contact Information
+    contactEmail: 'info@church.com',
+    contactPhone: '(555) 123-4567',
+    address: 'St. Joseph Church\n790 Salem Street\nMalden, MA 02148',
+    serviceTimes: 'Sundays at 10:00 AM and 6:00 PM',
+    
+    // Mass Schedule Section
+    massScheduleTitle: 'Mass Schedule',
+    massSchedulePeriod: 'October-December 2025',
+    massScheduleLocation: 'The Filipino Apostolate',
+    massScheduleAddress: '790 Salem Street',
+    massScheduleCityState: 'Malden, MA 02148',
+    massScheduleAdditionalInfo: 'For Additional Info',
+    
+    // Leadership Section
+    leadershipTitle: 'Leadership',
+    chaplainName: 'Father Peru Dayag, SVD',
+    northShoreCoordinator: 'Annie Taliad',
+    northShoreAssistantCoordinator: 'Jeffrey Pagulong',
+    northShoreSecretary: 'Meynard Gutierrez',
+    northShoreFinanceTeam: 'Crispina Gutierrez',
+    northShoreHeadOfLiturgy: 'Kaye Vito',
+    northShoreFaithFormation: 'Pearl Brault, Jun Cruz',
+    southShoreCoordinator: 'John Manuel',
+    southShoreAssistantCoordinator: 'Loreta Borneo',
+    southShoreSecretary: 'Alpha Cattaneo',
+    southShoreFinanceTeam: 'Rudy Hermosa',
+    southShoreHeadOfLiturgy: 'Ross Mangilog',
+    southShoreFaithFormation: 'Lisa Paradela, Salome Afable',
+    financeTreasurers: 'Priscilla Cruz, Gracita Chiefe',
+    financeAuditor: 'July Afable',
+    
+    // Events Section
+    eventsTitle: 'EVENTS',
+    eventsSubtitle: 'Our faith community provides many opportunities to fellowship with each other.\nHere are just a few of our upcoming events!',
+    
+    // Resources Section
+    resourcesTitle: 'Resources for Spiritual Growth',
+    resourcesSubtitle: 'Connect with Catholic resources and deepen your faith',
+    resourceLinks: [
+      { title: 'The Vatican: The Holy See', url: 'https://www.vatican.va/' },
+      { title: 'Archdiocese of Boston', url: 'https://www.bostoncatholic.org/' },
+      { title: 'Daily Readings', url: 'https://bible.usccb.org/daily-bible-reading' },
+      { title: "Cardinal Sean's Blog", url: 'https://www.cardinalseansblog.org/' },
+      { title: 'The Good Catholic Life', url: 'https://www.thegoodcatholiclife.com/' },
+      { title: 'Catholic Devotions', url: 'https://www.catholicdevotions.org/' }
+    ]
+};
 
 export default function WebsiteSettingsPage() {
   const [loading, setLoading] = useState(false);
   const [saved, setSaved] = useState(false);
-  const [settings, setSettings] = useState<WebsiteSettings>({
-    siteName: 'Filipino Apostolate of Boston',
-    tagline: 'A Christian Community who guides, takes care, and nourishes the faith life of our young people, and our fellow Filipinos in the Archdiocese of Boston.',
-    heroTitle: 'Welcome to Our Church Family',
-    heroSubtitle: 'Join us in faith, fellowship, and community',
-    aboutText: 'We are a welcoming community dedicated to serving God and each other. Our mission is to provide spiritual guidance and support to Filipino families in the Boston area.',
-    contactEmail: 'info@church.com',
-    contactPhone: '(555) 123-4567',
-    address: '123 Church Street, Boston, MA 02101',
-    serviceTimes: 'Sundays at 10:00 AM and 6:00 PM',
-    pastorName: 'Rev. Father John Smith',
-  });
+  const [settings, setSettings] = useState<WebsiteSettings>(defaultSettings);
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -68,6 +158,29 @@ export default function WebsiteSettingsPage() {
     }));
   };
 
+  const handleResourceLinkChange = (index: number, field: 'title' | 'url', value: string) => {
+    setSettings(prev => ({
+      ...prev,
+      resourceLinks: prev.resourceLinks?.map((link, i) => 
+        i === index ? { ...link, [field]: value } : link
+      ) || []
+    }));
+  };
+
+  const addResourceLink = () => {
+    setSettings(prev => ({
+      ...prev,
+      resourceLinks: [...(prev.resourceLinks || []), { title: '', url: '' }]
+    }));
+  };
+
+  const removeResourceLink = (index: number) => {
+    setSettings(prev => ({
+      ...prev,
+      resourceLinks: prev.resourceLinks?.filter((_, i) => i !== index) || []
+    }));
+  };
+
   // Load settings on component mount
   useEffect(() => {
     const loadSettings = async () => {
@@ -75,10 +188,19 @@ export default function WebsiteSettingsPage() {
         const response = await fetch('/api/settings');
         if (response.ok) {
           const data = await response.json();
-          setSettings(data.settings);
+          // Merge loaded settings with defaults to ensure all fields are populated
+          const mergedSettings = {
+            ...defaultSettings,
+            ...data.settings,
+            // Ensure resourceLinks array is properly merged
+            resourceLinks: data.settings.resourceLinks || defaultSettings.resourceLinks
+          };
+          setSettings(mergedSettings);
         }
       } catch (error) {
         console.error('Error loading settings:', error);
+        // If loading fails, keep the default settings
+        setSettings(defaultSettings);
       }
     };
     loadSettings();
@@ -284,6 +406,490 @@ export default function WebsiteSettingsPage() {
                   className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
                   placeholder="e.g., Sundays at 10:00 AM and 6:00 PM, Wednesdays at 7:00 PM"
                 />
+              </div>
+            </div>
+          </div>
+
+          {/* Mass Schedule Section */}
+          <div className="bg-white rounded-lg shadow-sm border">
+            <div className="p-6 border-b">
+              <h2 className="text-lg font-semibold text-gray-900">Mass Schedule Section</h2>
+              <p className="text-gray-600 mt-1">Content displayed in the Mass Schedule section</p>
+            </div>
+            <div className="p-6 space-y-6">
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                <div>
+                  <label htmlFor="massScheduleTitle" className="block text-sm font-medium text-gray-700 mb-2">
+                    Section Title
+                  </label>
+                  <input
+                    type="text"
+                    id="massScheduleTitle"
+                    name="massScheduleTitle"
+                    value={settings.massScheduleTitle || ''}
+                    onChange={handleInputChange}
+                    className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+                    placeholder="Mass Schedule"
+                  />
+                </div>
+
+                <div>
+                  <label htmlFor="massSchedulePeriod" className="block text-sm font-medium text-gray-700 mb-2">
+                    Schedule Period
+                  </label>
+                  <input
+                    type="text"
+                    id="massSchedulePeriod"
+                    name="massSchedulePeriod"
+                    value={settings.massSchedulePeriod || ''}
+                    onChange={handleInputChange}
+                    className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+                    placeholder="October-December 2025"
+                  />
+                </div>
+              </div>
+
+              <div>
+                <label htmlFor="massScheduleLocation" className="block text-sm font-medium text-gray-700 mb-2">
+                  Location Name
+                </label>
+                <input
+                  type="text"
+                  id="massScheduleLocation"
+                  name="massScheduleLocation"
+                  value={settings.massScheduleLocation || ''}
+                  onChange={handleInputChange}
+                  className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+                  placeholder="The Filipino Apostolate"
+                />
+              </div>
+
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                <div>
+                  <label htmlFor="massScheduleAddress" className="block text-sm font-medium text-gray-700 mb-2">
+                    Street Address
+                  </label>
+                  <input
+                    type="text"
+                    id="massScheduleAddress"
+                    name="massScheduleAddress"
+                    value={settings.massScheduleAddress || ''}
+                    onChange={handleInputChange}
+                    className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+                    placeholder="790 Salem Street"
+                  />
+                </div>
+
+                <div>
+                  <label htmlFor="massScheduleCityState" className="block text-sm font-medium text-gray-700 mb-2">
+                    City, State
+                  </label>
+                  <input
+                    type="text"
+                    id="massScheduleCityState"
+                    name="massScheduleCityState"
+                    value={settings.massScheduleCityState || ''}
+                    onChange={handleInputChange}
+                    className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+                    placeholder="Malden, MA 02148"
+                  />
+                </div>
+              </div>
+
+              <div>
+                <label htmlFor="massScheduleAdditionalInfo" className="block text-sm font-medium text-gray-700 mb-2">
+                  Additional Information
+                </label>
+                <input
+                  type="text"
+                  id="massScheduleAdditionalInfo"
+                  name="massScheduleAdditionalInfo"
+                  value={settings.massScheduleAdditionalInfo || ''}
+                  onChange={handleInputChange}
+                  className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+                  placeholder="For Additional Info"
+                />
+              </div>
+            </div>
+          </div>
+
+          {/* Leadership Section */}
+          <div className="bg-white rounded-lg shadow-sm border">
+            <div className="p-6 border-b">
+              <h2 className="text-lg font-semibold text-gray-900">Leadership Section</h2>
+              <p className="text-gray-600 mt-1">Leadership information displayed on the website</p>
+            </div>
+            <div className="p-6 space-y-6">
+              <div>
+                <label htmlFor="leadershipTitle" className="block text-sm font-medium text-gray-700 mb-2">
+                  Section Title
+                </label>
+                <input
+                  type="text"
+                  id="leadershipTitle"
+                  name="leadershipTitle"
+                  value={settings.leadershipTitle || ''}
+                  onChange={handleInputChange}
+                  className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+                  placeholder="Leadership"
+                />
+              </div>
+
+              <div>
+                <label htmlFor="chaplainName" className="block text-sm font-medium text-gray-700 mb-2">
+                  Chaplain Name
+                </label>
+                <input
+                  type="text"
+                  id="chaplainName"
+                  name="chaplainName"
+                  value={settings.chaplainName || ''}
+                  onChange={handleInputChange}
+                  className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+                  placeholder="Father Peru Dayag, SVD"
+                />
+              </div>
+
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                <div>
+                  <h3 className="text-md font-semibold text-gray-800 mb-4">North Shore Leadership</h3>
+                  <div className="space-y-4">
+                    <div>
+                      <label htmlFor="northShoreCoordinator" className="block text-sm font-medium text-gray-700 mb-1">
+                        Coordinator
+                      </label>
+                      <input
+                        type="text"
+                        id="northShoreCoordinator"
+                        name="northShoreCoordinator"
+                        value={settings.northShoreCoordinator || ''}
+                        onChange={handleInputChange}
+                        className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+                        placeholder="Annie Taliad"
+                      />
+                    </div>
+                    <div>
+                      <label htmlFor="northShoreAssistantCoordinator" className="block text-sm font-medium text-gray-700 mb-1">
+                        Assistant Coordinator
+                      </label>
+                      <input
+                        type="text"
+                        id="northShoreAssistantCoordinator"
+                        name="northShoreAssistantCoordinator"
+                        value={settings.northShoreAssistantCoordinator || ''}
+                        onChange={handleInputChange}
+                        className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+                        placeholder="Jeffrey Pagulong"
+                      />
+                    </div>
+                    <div>
+                      <label htmlFor="northShoreSecretary" className="block text-sm font-medium text-gray-700 mb-1">
+                        Secretary
+                      </label>
+                      <input
+                        type="text"
+                        id="northShoreSecretary"
+                        name="northShoreSecretary"
+                        value={settings.northShoreSecretary || ''}
+                        onChange={handleInputChange}
+                        className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+                        placeholder="Meynard Gutierrez"
+                      />
+                    </div>
+                    <div>
+                      <label htmlFor="northShoreFinanceTeam" className="block text-sm font-medium text-gray-700 mb-1">
+                        Finance Team
+                      </label>
+                      <input
+                        type="text"
+                        id="northShoreFinanceTeam"
+                        name="northShoreFinanceTeam"
+                        value={settings.northShoreFinanceTeam || ''}
+                        onChange={handleInputChange}
+                        className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+                        placeholder="Crispina Gutierrez"
+                      />
+                    </div>
+                    <div>
+                      <label htmlFor="northShoreHeadOfLiturgy" className="block text-sm font-medium text-gray-700 mb-1">
+                        Head of Liturgy
+                      </label>
+                      <input
+                        type="text"
+                        id="northShoreHeadOfLiturgy"
+                        name="northShoreHeadOfLiturgy"
+                        value={settings.northShoreHeadOfLiturgy || ''}
+                        onChange={handleInputChange}
+                        className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+                        placeholder="Kaye Vito"
+                      />
+                    </div>
+                    <div>
+                      <label htmlFor="northShoreFaithFormation" className="block text-sm font-medium text-gray-700 mb-1">
+                        Faith Formation Outreach
+                      </label>
+                      <input
+                        type="text"
+                        id="northShoreFaithFormation"
+                        name="northShoreFaithFormation"
+                        value={settings.northShoreFaithFormation || ''}
+                        onChange={handleInputChange}
+                        className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+                        placeholder="Pearl Brault, Jun Cruz"
+                      />
+                    </div>
+                  </div>
+                </div>
+
+                <div>
+                  <h3 className="text-md font-semibold text-gray-800 mb-4">South Shore Leadership</h3>
+                  <div className="space-y-4">
+                    <div>
+                      <label htmlFor="southShoreCoordinator" className="block text-sm font-medium text-gray-700 mb-1">
+                        Coordinator
+                      </label>
+                      <input
+                        type="text"
+                        id="southShoreCoordinator"
+                        name="southShoreCoordinator"
+                        value={settings.southShoreCoordinator || ''}
+                        onChange={handleInputChange}
+                        className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+                        placeholder="John Manuel"
+                      />
+                    </div>
+                    <div>
+                      <label htmlFor="southShoreAssistantCoordinator" className="block text-sm font-medium text-gray-700 mb-1">
+                        Assistant Coordinator
+                      </label>
+                      <input
+                        type="text"
+                        id="southShoreAssistantCoordinator"
+                        name="southShoreAssistantCoordinator"
+                        value={settings.southShoreAssistantCoordinator || ''}
+                        onChange={handleInputChange}
+                        className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+                        placeholder="Loreta Borneo"
+                      />
+                    </div>
+                    <div>
+                      <label htmlFor="southShoreSecretary" className="block text-sm font-medium text-gray-700 mb-1">
+                        Secretary
+                      </label>
+                      <input
+                        type="text"
+                        id="southShoreSecretary"
+                        name="southShoreSecretary"
+                        value={settings.southShoreSecretary || ''}
+                        onChange={handleInputChange}
+                        className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+                        placeholder="Alpha Cattaneo"
+                      />
+                    </div>
+                    <div>
+                      <label htmlFor="southShoreFinanceTeam" className="block text-sm font-medium text-gray-700 mb-1">
+                        Finance Team
+                      </label>
+                      <input
+                        type="text"
+                        id="southShoreFinanceTeam"
+                        name="southShoreFinanceTeam"
+                        value={settings.southShoreFinanceTeam || ''}
+                        onChange={handleInputChange}
+                        className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+                        placeholder="Rudy Hermosa"
+                      />
+                    </div>
+                    <div>
+                      <label htmlFor="southShoreHeadOfLiturgy" className="block text-sm font-medium text-gray-700 mb-1">
+                        Head of Liturgy
+                      </label>
+                      <input
+                        type="text"
+                        id="southShoreHeadOfLiturgy"
+                        name="southShoreHeadOfLiturgy"
+                        value={settings.southShoreHeadOfLiturgy || ''}
+                        onChange={handleInputChange}
+                        className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+                        placeholder="Ross Mangilog"
+                      />
+                    </div>
+                    <div>
+                      <label htmlFor="southShoreFaithFormation" className="block text-sm font-medium text-gray-700 mb-1">
+                        Faith Formation Outreach
+                      </label>
+                      <input
+                        type="text"
+                        id="southShoreFaithFormation"
+                        name="southShoreFaithFormation"
+                        value={settings.southShoreFaithFormation || ''}
+                        onChange={handleInputChange}
+                        className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+                        placeholder="Lisa Paradela, Salome Afable"
+                      />
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                <div>
+                  <label htmlFor="financeTreasurers" className="block text-sm font-medium text-gray-700 mb-2">
+                    Finance Treasurers
+                  </label>
+                  <input
+                    type="text"
+                    id="financeTreasurers"
+                    name="financeTreasurers"
+                    value={settings.financeTreasurers || ''}
+                    onChange={handleInputChange}
+                    className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+                    placeholder="Priscilla Cruz, Gracita Chiefe"
+                  />
+                </div>
+                <div>
+                  <label htmlFor="financeAuditor" className="block text-sm font-medium text-gray-700 mb-2">
+                    Finance Auditor
+                  </label>
+                  <input
+                    type="text"
+                    id="financeAuditor"
+                    name="financeAuditor"
+                    value={settings.financeAuditor || ''}
+                    onChange={handleInputChange}
+                    className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+                    placeholder="July Afable"
+                  />
+                </div>
+              </div>
+            </div>
+          </div>
+
+          {/* Events Section */}
+          <div className="bg-white rounded-lg shadow-sm border">
+            <div className="p-6 border-b">
+              <h2 className="text-lg font-semibold text-gray-900">Events Section</h2>
+              <p className="text-gray-600 mt-1">Content displayed in the Events section</p>
+            </div>
+            <div className="p-6 space-y-6">
+              <div>
+                <label htmlFor="eventsTitle" className="block text-sm font-medium text-gray-700 mb-2">
+                  Section Title
+                </label>
+                <input
+                  type="text"
+                  id="eventsTitle"
+                  name="eventsTitle"
+                  value={settings.eventsTitle || ''}
+                  onChange={handleInputChange}
+                  className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+                  placeholder="EVENTS"
+                />
+              </div>
+
+              <div>
+                <label htmlFor="eventsSubtitle" className="block text-sm font-medium text-gray-700 mb-2">
+                  Section Subtitle
+                </label>
+                <textarea
+                  id="eventsSubtitle"
+                  name="eventsSubtitle"
+                  value={settings.eventsSubtitle || ''}
+                  onChange={handleInputChange}
+                  rows={3}
+                  className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+                  placeholder="Our faith community provides many opportunities to fellowship with each other. Here are just a few of our upcoming events!"
+                />
+              </div>
+            </div>
+          </div>
+
+          {/* Resources Section */}
+          <div className="bg-white rounded-lg shadow-sm border">
+            <div className="p-6 border-b">
+              <h2 className="text-lg font-semibold text-gray-900">Resources Section</h2>
+              <p className="text-gray-600 mt-1">Resource links displayed on the website</p>
+            </div>
+            <div className="p-6 space-y-6">
+              <div>
+                <label htmlFor="resourcesTitle" className="block text-sm font-medium text-gray-700 mb-2">
+                  Section Title
+                </label>
+                <input
+                  type="text"
+                  id="resourcesTitle"
+                  name="resourcesTitle"
+                  value={settings.resourcesTitle || ''}
+                  onChange={handleInputChange}
+                  className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+                  placeholder="Resources for Spiritual Growth"
+                />
+              </div>
+
+              <div>
+                <label htmlFor="resourcesSubtitle" className="block text-sm font-medium text-gray-700 mb-2">
+                  Section Subtitle
+                </label>
+                <input
+                  type="text"
+                  id="resourcesSubtitle"
+                  name="resourcesSubtitle"
+                  value={settings.resourcesSubtitle || ''}
+                  onChange={handleInputChange}
+                  className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+                  placeholder="Connect with Catholic resources and deepen your faith"
+                />
+              </div>
+
+              <div>
+                <div className="flex items-center justify-between mb-4">
+                  <h3 className="text-md font-semibold text-gray-800">Resource Links</h3>
+                  <button
+                    type="button"
+                    onClick={addResourceLink}
+                    className="px-4 py-2 bg-blue-600 hover:bg-blue-700 text-white rounded-lg transition-colors text-sm"
+                  >
+                    Add Resource Link
+                  </button>
+                </div>
+                
+                <div className="space-y-4">
+                  {(settings.resourceLinks || []).map((link, index) => (
+                    <div key={index} className="flex gap-4 items-end">
+                      <div className="flex-1">
+                        <label className="block text-sm font-medium text-gray-700 mb-1">
+                          Title
+                        </label>
+                        <input
+                          type="text"
+                          value={link.title}
+                          onChange={(e) => handleResourceLinkChange(index, 'title', e.target.value)}
+                          className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+                          placeholder="Resource title"
+                        />
+                      </div>
+                      <div className="flex-1">
+                        <label className="block text-sm font-medium text-gray-700 mb-1">
+                          URL
+                        </label>
+                        <input
+                          type="url"
+                          value={link.url}
+                          onChange={(e) => handleResourceLinkChange(index, 'url', e.target.value)}
+                          className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+                          placeholder="https://example.com"
+                        />
+                      </div>
+                      <button
+                        type="button"
+                        onClick={() => removeResourceLink(index)}
+                        className="px-3 py-2 bg-red-600 hover:bg-red-700 text-white rounded-lg transition-colors text-sm"
+                      >
+                        Remove
+                      </button>
+                    </div>
+                  ))}
+                </div>
               </div>
             </div>
           </div>

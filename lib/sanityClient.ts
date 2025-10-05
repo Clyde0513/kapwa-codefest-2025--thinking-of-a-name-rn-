@@ -1,9 +1,9 @@
 import { createClient } from 'next-sanity';
 
 export const sanityClient = createClient({
-  projectId: 'b4h3ckxo', // Your actual Sanity project ID
-  dataset: 'production',
-  apiVersion: '2024-01-01',
+  projectId: process.env.NEXT_PUBLIC_SANITY_PROJECT_ID || 'b4h3ckxo',
+  dataset: process.env.NEXT_PUBLIC_SANITY_DATASET || 'production',
+  apiVersion: process.env.NEXT_PUBLIC_SANITY_API_VERSION || '2025-10-05',
   useCdn: true,
 });
 

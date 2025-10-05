@@ -2,10 +2,36 @@
 
 import Link from 'next/link';
 import Image from 'next/image';
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
+
+interface Settings {
+  siteName: string;
+}
 
 export default function Header() {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
+  const [settings, setSettings] = useState<Settings | null>(null);
+
+  useEffect(() => {
+    const fetchSettings = async () => {
+      try {
+        const response = await fetch('/api/settings');
+        const data = await response.json();
+        if (response.ok) {
+          setSettings(data.settings);
+        }
+      } catch (error) {
+        console.error('Error fetching settings:', error);
+      }
+    };
+
+    fetchSettings();
+  }, []);
+
+  const siteName = settings?.siteName || 'Filipino Apostolate of Boston';
+  const nameParts = siteName.split(' ');
+  const firstPart = nameParts.slice(0, -2).join(' '); // "Filipino Apostolate"
+  const lastPart = nameParts.slice(-2).join(' '); // "of Boston"
 
   return (
     <header className="bg-gradient-to-r from-[#7A0000] to-[#A01010] text-white top-0 z-50 shadow-xl border-b border-white/10">
@@ -16,7 +42,7 @@ export default function Header() {
             <div className="w-24 h-24 sm:w-28 sm:h-28 relative flex-shrink-0 drop-shadow-lg">
               <Image
                 src="/images/catholic_logo.png"
-                alt="Filipino Apostolate of Boston Logo"
+                alt={`${siteName} Logo`}
                 width={112}
                 height={112}
                 className="w-full h-full object-contain"
@@ -25,9 +51,9 @@ export default function Header() {
             </div>
             <div className="text-center mt-1">
               <h1 className="font-poppins font-semibold text-base sm:text-lg leading-tight text-white tracking-wide">
-                Filipino Apostolate
+                {firstPart}
               </h1>
-              <p className="text-sm sm:text-base font-poppins font-light text-white/95 tracking-wider">of Boston</p>
+              <p className="text-sm sm:text-base font-poppins font-light text-white/95 tracking-wider">{lastPart}</p>
             </div>
           </Link>
 

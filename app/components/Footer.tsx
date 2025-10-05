@@ -2,9 +2,39 @@
 
 import Image from 'next/image';
 import Link from 'next/link';
+import { useEffect, useState } from 'react';
+
+interface Settings {
+  siteName: string;
+  address: string;
+  contactPhone: string;
+  contactEmail: string;
+}
 
 export default function Footer() {
   const currentYear = new Date().getFullYear();
+  const [settings, setSettings] = useState<Settings | null>(null);
+
+  useEffect(() => {
+    const fetchSettings = async () => {
+      try {
+        const response = await fetch('/api/settings');
+        const data = await response.json();
+        if (response.ok) {
+          setSettings(data.settings);
+        }
+      } catch (error) {
+        console.error('Error fetching settings:', error);
+      }
+    };
+
+    fetchSettings();
+  }, []);
+
+  const siteName = settings?.siteName || 'Filipino Apostolate of Boston';
+  const address = settings?.address || 'St. Joseph Church\n790 Salem Street\nMalden, MA 02148';
+  const phone = settings?.contactPhone || '';
+  const email = settings?.contactEmail || '';
 
   const handleNavClick = (e: React.MouseEvent<HTMLAnchorElement>, targetId: string) => {
     e.preventDefault();
@@ -24,18 +54,15 @@ export default function Footer() {
             <div className="w-32 h-32 relative mb-4">
               <Image
                 src="/images/catholic_logo.png"
-                alt="Filipino Apostolate of Boston Logo"
+                alt={`${siteName} Logo`}
                 width={128}
                 height={128}
                 className="w-full h-full object-contain drop-shadow-lg"
               />
             </div>
             <h3 className="font-poppins font-bold text-xl text-center md:text-left">
-              Filipino Apostolate
+              {siteName}
             </h3>
-            <p className="font-poppins text-lg text-white/90 text-center md:text-left">
-              of Boston
-            </p>
           </div>
 
           {/* Quick Links */}
@@ -84,12 +111,25 @@ export default function Footer() {
           <div className="text-center md:text-left">
             <h4 className="font-poppins font-bold text-lg mb-4">Connect With Us</h4>
             <div className="space-y-3">
-              <p className="text-white/90">
+              <div className="text-white/90">
                 <span className="font-semibold">Location:</span><br />
-                St. Joseph Church<br />
-                790 Salem Street<br />
-                Malden, MA 02148
-              </p>
+                {address.split('\n').map((line, index) => (
+                  <span key={index}>
+                    {line}
+                    {index < address.split('\n').length - 1 && <br />}
+                  </span>
+                ))}
+              </div>
+              {phone && (
+                <div className="text-white/90 mt-2">
+                  <span className="font-semibold">Phone:</span> {phone}
+                </div>
+              )}
+              {email && (
+                <div className="text-white/90 mt-2">
+                  <span className="font-semibold">Email:</span> {email}
+                </div>
+              )}
               
               {/* Social Media Icons */}
               <div className="flex gap-4 justify-center md:justify-start pt-4">
@@ -137,7 +177,7 @@ export default function Footer() {
         {/* Bottom Section - Copyright */}
         <div className="text-center text-white/80">
           <p className="text-sm md:text-base">
-            &copy; {currentYear} Filipino Apostolate of Boston. All rights reserved.
+            &copy; {currentYear} {siteName}. All rights reserved.
           </p>
           <p className="text-sm mt-2">
             North Shore and South Shore Communities

@@ -46,7 +46,7 @@ export default async function BlogManagementPage() {
                 Back to Admin
               </Link>
               <Link
-                href="/studio"
+                href="https://b4h3ckxo.sanity.studio/"
                 target="_blank"
                 className="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-lg transition-colors"
               >
@@ -115,7 +115,7 @@ export default async function BlogManagementPage() {
                 <h3 className="text-lg font-medium text-gray-900 mb-2">No blog posts yet</h3>
                 <p className="text-gray-600 mb-4">Create your first blog post to share news and updates with your community</p>
                 <Link
-                  href="/studio"
+                  href="https://b4h3ckxo.sanity.studio/"
                   target="_blank"
                   className="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-lg transition-colors"
                 >
@@ -148,7 +148,7 @@ export default async function BlogManagementPage() {
                     </div>
                     <div className="flex items-center space-x-2">
                       <Link
-                        href={`/studio/post/${post._id}`}
+                        href={`https://b4h3ckxo.sanity.studio/desk/post;${post._id}`}
                         target="_blank"
                         className="text-blue-600 hover:text-blue-700 text-sm font-medium"
                       >

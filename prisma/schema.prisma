@@ -142,3 +142,15 @@ model Photo {
   @@index([createdAt])
 }
 
+model Settings {
+  id          String   @id @default(uuid())
+  key         String   @unique // e.g., 'website', 'contact', etc.
+  value       Json     // Store settings as JSON
+  description String?  // Optional description of what this setting controls
+  
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  @@index([key])
+}
+

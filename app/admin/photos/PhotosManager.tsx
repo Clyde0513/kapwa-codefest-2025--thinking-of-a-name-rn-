@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect, useState } from 'react';
+import PhotoUpload from '../../../components/PhotoUpload';
 
 interface Photo {
   id: string;
@@ -97,6 +98,17 @@ export default function PhotosManager() {
       <div className="flex items-center justify-between mb-6">
         <h2 className="text-xl font-semibold">Photos</h2>
         <div className="text-sm text-gray-500">{photos?.length ?? 0} photos</div>
+      </div>
+
+      {/* Upload Section */}
+      <div className="mb-8 p-6 bg-gray-50 rounded-lg border-2 border-dashed border-gray-300">
+        <h3 className="text-lg font-medium text-gray-900 mb-4">Upload New Photos</h3>
+        <p className="text-sm text-gray-600 mb-4">
+          Upload photos to your gallery. They will appear on the public Gallery page and can be used in blog posts.
+        </p>
+        <PhotoUpload 
+          onUploadComplete={() => fetchPhotos()} 
+        />
       </div>
 
       {error && (

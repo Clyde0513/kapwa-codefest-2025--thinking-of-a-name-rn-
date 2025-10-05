@@ -18,7 +18,7 @@ export default function Home() {
        {/* Embedded blog preview: latest 3 posts */}
       <section className="max-w-4xl mx-auto py-12 px-4">
             <h2 className="text-3xl font-poppins mb-6">Latest News</h2>
-      {/* BlogList is a server component that fetches posts */}
+      {/* DatabaseBlogList is a server component that fetches posts */}
       <DatabaseBlogList limit={3} />
       <div className="flex justify-center mt-8">
         <Link href="/blog" className="bg-red-600 hover:bg-red-700 text-white font-bold px-12 py-4 rounded-full transition-all text-xl font-poppins border-4 border-white shadow-lg">

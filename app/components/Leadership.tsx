@@ -1,13 +1,68 @@
 'use client';
 
 import Image from 'next/image';
+import { useEffect, useState } from 'react';
+
+interface Settings {
+  leadershipTitle?: string;
+  chaplainName?: string;
+  northShoreCoordinator?: string;
+  northShoreAssistantCoordinator?: string;
+  northShoreSecretary?: string;
+  northShoreFinanceTeam?: string;
+  northShoreHeadOfLiturgy?: string;
+  northShoreFaithFormation?: string;
+  southShoreCoordinator?: string;
+  southShoreAssistantCoordinator?: string;
+  southShoreSecretary?: string;
+  southShoreFinanceTeam?: string;
+  southShoreHeadOfLiturgy?: string;
+  southShoreFaithFormation?: string;
+  financeTreasurers?: string;
+  financeAuditor?: string;
+}
 
 export default function Leadership() {
+  const [settings, setSettings] = useState<Settings | null>(null);
+
+  useEffect(() => {
+    const fetchSettings = async () => {
+      try {
+        const response = await fetch('/api/settings');
+        const data = await response.json();
+        if (response.ok) {
+          setSettings(data.settings);
+        }
+      } catch (error) {
+        console.error('Error fetching settings:', error);
+      }
+    };
+
+    fetchSettings();
+  }, []);
+
+  // Fallback values
+  const title = settings?.leadershipTitle || 'Leadership';
+  const chaplain = settings?.chaplainName || 'Father Peru Dayag, SVD';
+  const northShoreCoordinator = settings?.northShoreCoordinator || 'Annie Taliad';
+  const northShoreAssistantCoordinator = settings?.northShoreAssistantCoordinator || 'Jeffrey Pagulong';
+  const northShoreSecretary = settings?.northShoreSecretary || 'Meynard Gutierrez';
+  const northShoreFinanceTeam = settings?.northShoreFinanceTeam || 'Crispina Gutierrez';
+  const northShoreHeadOfLiturgy = settings?.northShoreHeadOfLiturgy || 'Kaye Vito';
+  const northShoreFaithFormation = settings?.northShoreFaithFormation || 'Pearl Brault, Jun Cruz';
+  const southShoreCoordinator = settings?.southShoreCoordinator || 'John Manuel';
+  const southShoreAssistantCoordinator = settings?.southShoreAssistantCoordinator || 'Loreta Borneo';
+  const southShoreSecretary = settings?.southShoreSecretary || 'Alpha Cattaneo';
+  const southShoreFinanceTeam = settings?.southShoreFinanceTeam || 'Rudy Hermosa';
+  const southShoreHeadOfLiturgy = settings?.southShoreHeadOfLiturgy || 'Ross Mangilog';
+  const southShoreFaithFormation = settings?.southShoreFaithFormation || 'Lisa Paradela, Salome Afable';
+  const financeTreasurers = settings?.financeTreasurers || 'Priscilla Cruz, Gracita Chiefe';
+  const financeAuditor = settings?.financeAuditor || 'July Afable';
   return (
     <section id="leadership" className="py-20 px-4" style={{ backgroundColor: '#FFFDD0' }}>
       <div className="max-w-7xl mx-auto">
         <h2 className="text-4xl font-poppins font-bold text-gray-900 text-center mb-12">
-          Leadership
+          {title}
         </h2>
         
         <div className="max-w-6xl mx-auto">
@@ -51,7 +106,7 @@ export default function Leadership() {
                       CHAPLAIN
                     </h5>
                     <p className="text-base md:text-lg text-center lg:text-left">
-                      Father Peru Dayag, SVD
+                      {chaplain}
                     </p>
                   </div>
 
@@ -88,29 +143,33 @@ export default function Leadership() {
                   <div className="space-y-3 text-base md:text-lg">
                     <div className="flex justify-between items-start">
                       <span className="font-semibold">Coordinator</span>
-                      <span className="text-right">Annie Taliad</span>
+                      <span className="text-right">{northShoreCoordinator}</span>
                     </div>
                     <div className="flex justify-between items-start">
                       <span className="font-semibold">Assistant Coordinator</span>
-                      <span className="text-right">Jeffrey Pagulong</span>
+                      <span className="text-right">{northShoreAssistantCoordinator}</span>
                     </div>
                     <div className="flex justify-between items-start">
                       <span className="font-semibold">Secretary</span>
-                      <span className="text-right">Meynard Gutierrez</span>
+                      <span className="text-right">{northShoreSecretary}</span>
                     </div>
                     <div className="flex justify-between items-start">
                       <span className="font-semibold">Finance Team</span>
-                      <span className="text-right">Crispina Gutierrez</span>
+                      <span className="text-right">{northShoreFinanceTeam}</span>
                     </div>
                     <div className="flex justify-between items-start">
                       <span className="font-semibold">Head of Liturgy</span>
-                      <span className="text-right">Kaye Vito</span>
+                      <span className="text-right">{northShoreHeadOfLiturgy}</span>
                     </div>
                     <div className="flex justify-between items-start">
                       <span className="font-semibold">Faith Formation Outreach</span>
                       <span className="text-right">
-                        Pearl Brault<br />
-                        Jun Cruz
+                        {northShoreFaithFormation.split(',').map((name, index) => (
+                          <span key={index}>
+                            {name.trim()}
+                            {index < northShoreFaithFormation.split(',').length - 1 && <br />}
+                          </span>
+                        ))}
                       </span>
                     </div>
                   </div>
@@ -128,29 +187,33 @@ export default function Leadership() {
                   <div className="space-y-3 text-base md:text-lg">
                     <div className="flex justify-between items-start">
                       <span className="font-semibold">Coordinator</span>
-                      <span className="text-right">John Manuel</span>
+                      <span className="text-right">{southShoreCoordinator}</span>
                     </div>
                     <div className="flex justify-between items-start">
                       <span className="font-semibold">Assistant Coordinator</span>
-                      <span className="text-right">Loreta Borneo</span>
+                      <span className="text-right">{southShoreAssistantCoordinator}</span>
                     </div>
                     <div className="flex justify-between items-start">
                       <span className="font-semibold">Secretary</span>
-                      <span className="text-right">Alpha Cattaneo</span>
+                      <span className="text-right">{southShoreSecretary}</span>
                     </div>
                     <div className="flex justify-between items-start">
                       <span className="font-semibold">Finance Team</span>
-                      <span className="text-right">Rudy Hermosa</span>
+                      <span className="text-right">{southShoreFinanceTeam}</span>
                     </div>
                     <div className="flex justify-between items-start">
                       <span className="font-semibold">Head of Liturgy</span>
-                      <span className="text-right">Ross Mangilog</span>
+                      <span className="text-right">{southShoreHeadOfLiturgy}</span>
                     </div>
                     <div className="flex justify-between items-start">
                       <span className="font-semibold">Faith Formation Outreach</span>
                       <span className="text-right">
-                        Lisa Paradela<br />
-                        Salome Afable
+                        {southShoreFaithFormation.split(',').map((name, index) => (
+                          <span key={index}>
+                            {name.trim()}
+                            {index < southShoreFaithFormation.split(',').length - 1 && <br />}
+                          </span>
+                        ))}
                       </span>
                     </div>
                   </div>
@@ -167,13 +230,17 @@ export default function Leadership() {
                   <div className="flex justify-between items-start">
                     <span className="font-semibold">Treasurers</span>
                     <span className="text-right">
-                      Priscilla Cruz<br />
-                      Gracita Chiefe
+                      {financeTreasurers.split(',').map((name, index) => (
+                        <span key={index}>
+                          {name.trim()}
+                          {index < financeTreasurers.split(',').length - 1 && <br />}
+                        </span>
+                      ))}
                     </span>
                   </div>
                   <div className="flex justify-between items-start">
                     <span className="font-semibold">Auditor</span>
-                    <span className="text-right">July Afable</span>
+                    <span className="text-right">{financeAuditor}</span>
                   </div>
                 </div>
               </div>

@@ -1,8 +1,41 @@
 'use client';
 
 import Link from 'next/link';
+import { useEffect, useState } from 'react';
+
+interface Settings {
+  siteName: string;
+  tagline: string;
+  heroTitle: string;
+  heroSubtitle: string;
+  aboutText: string;
+}
 
 export default function Hero() {
+  const [settings, setSettings] = useState<Settings | null>(null);
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    const fetchSettings = async () => {
+      try {
+        const response = await fetch('/api/settings');
+        const data = await response.json();
+        if (response.ok) {
+          setSettings(data.settings);
+        }
+      } catch (error) {
+        console.error('Error fetching settings:', error);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchSettings();
+  }, []);
+
+  // Fallback values
+  const siteName = settings?.siteName || 'Filipino Apostolate of Boston';
+  const tagline = settings?.tagline || 'We are a Christian Community who guides, takes care, and nourishes the faith life of our young people, and our fellow Filipinos in the Archdiocese of Boston.';
   return (
     <section className="relative bg-gradient-to-br from-[#decca6] via-[#c0a154] to-[#decca6] text-gray-900 py-16 sm:py-20 lg:py-24 overflow-hidden">
       {/* Modern background effects */}
@@ -17,22 +50,23 @@ export default function Hero() {
       }}></div>
 
       <div className="relative max-w-6xl mx-auto px-6 sm:px-8 lg:px-12 text-center z-10">
-        <h1 className="font-poppins text-4xl sm:text-5xl lg:text-6xl font-bold mb-6 leading-tight tracking-wide">
-          Welcome to the  
-        </h1>
-          <h1>
-          <span className="font-poppins text-4xl sm:text-5xl lg:text-6xl font-bold mb-6 leading-tight tracking-wide">Filipino Apostolate of Boston</span>
-       
-      </h1>
-        
-        <p className="text-lg sm:text-xl lg:text-2xl mb-12 leading-relaxed font-bold max-w-4xl mx-auto text-gray-800">
-               <br />
-          We are a Christian Community who guides, takes care,
-          <br className="hidden sm:block" />
-          and nourishes the faith life of our young people,
-          <br className="hidden sm:block" />
-          and our fellow Filipinos in the Archdiocese of Boston.
-        </p>
+        {loading ? (
+          <div className="animate-pulse">
+            <div className="h-16 bg-gray-300 rounded mb-6 mx-auto max-w-2xl"></div>
+            <div className="h-6 bg-gray-300 rounded mb-4 mx-auto max-w-4xl"></div>
+            <div className="h-6 bg-gray-300 rounded mb-4 mx-auto max-w-3xl"></div>
+          </div>
+        ) : (
+          <>
+            <h1 className="font-poppins text-4xl sm:text-5xl lg:text-6xl font-bold mb-6 leading-tight tracking-wide">
+              Welcome to the {siteName}
+            </h1>
+            
+            <p className="text-lg sm:text-xl lg:text-2xl mb-12 leading-relaxed font-bold max-w-4xl mx-auto text-gray-800">
+              {tagline}
+            </p>
+          </>
+        )}
 
         {/* CTA Buttons */}
         <div className="flex flex-col sm:flex-row gap-5 justify-center items-center mb-6">

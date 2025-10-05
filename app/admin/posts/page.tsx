@@ -1,31 +1,23 @@
 import Link from 'next/link';
-import { prisma } from '../../../lib/prisma';
+import { db } from '../../../lib/db-utils';
 
-export default async function PostsPage() {
+export default async function PostsManagementPage() {
   let posts: any[] = [];
-  let total = 0;
 
   try {
-    const result = await prisma.post.findMany({
+    // Get posts from database
+    const result = await db.findManyPosts({
       take: 50,
       orderBy: { createdAt: 'desc' },
       include: {
         author: {
           select: { name: true, email: true },
         },
-        _count: {
-          select: {
-            comments: true,
-            likes: true,
-          },
-        },
       },
     });
     posts = result;
-    total = await prisma.post.count();
   } catch (error) {
-    console.error('Error fetching posts:', error);
-    // Continue with empty array
+    console.error('Error fetching posts from database:', error);
   }
 
   return (
@@ -38,10 +30,10 @@ export default async function PostsPage() {
               <nav className="flex items-center space-x-2 text-sm text-gray-500">
                 <Link href="/admin" className="hover:text-gray-700">Admin</Link>
                 <span>›</span>
-                <span className="text-gray-900">Posts</span>
+                <span className="text-gray-900">Blog Posts</span>
               </nav>
-              <h1 className="text-2xl font-bold text-gray-900 mt-2">Manage Posts</h1>
-              <p className="text-gray-600 mt-1">Create and edit your church posts</p>
+              <h1 className="text-2xl font-bold text-gray-900 mt-2">Blog Posts</h1>
+              <p className="text-gray-600 mt-1">Manage your church blog posts</p>
             </div>
             <div className="flex space-x-4">
               <Link
@@ -54,7 +46,7 @@ export default async function PostsPage() {
                 href="/admin/posts/new"
                 className="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-lg transition-colors"
               >
-                New Post
+                Create New Post
               </Link>
             </div>
           </div>
@@ -66,8 +58,8 @@ export default async function PostsPage() {
         <div className="bg-white rounded-lg shadow-sm border p-6 mb-8">
           <div className="flex items-center justify-between">
             <div>
-              <h2 className="text-lg font-semibold text-gray-900">Posts Overview</h2>
-              <p className="text-gray-600">Total posts: {total}</p>
+              <h2 className="text-lg font-semibold text-gray-900">Blog Overview</h2>
+              <p className="text-gray-600">Total posts: {posts.length}</p>
             </div>
             <div className="flex space-x-4 text-sm">
               <div className="bg-green-100 text-green-800 px-3 py-1 rounded-full">
@@ -83,7 +75,7 @@ export default async function PostsPage() {
         {/* Posts List */}
         <div className="bg-white rounded-lg shadow-sm border">
           <div className="p-6 border-b">
-            <h2 className="text-lg font-semibold text-gray-900">All Posts</h2>
+            <h2 className="text-lg font-semibold text-gray-900">All Blog Posts</h2>
           </div>
           <div className="divide-y divide-gray-200">
             {posts.length === 0 ? (
@@ -93,8 +85,8 @@ export default async function PostsPage() {
                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
                   </svg>
                 </div>
-                <h3 className="text-lg font-medium text-gray-900 mb-2">No posts yet</h3>
-                <p className="text-gray-600 mb-4">Create your first post to get started</p>
+                <h3 className="text-lg font-medium text-gray-900 mb-2">No blog posts yet</h3>
+                <p className="text-gray-600 mb-4">Create your first blog post to share news and updates with your community</p>
                 <Link
                   href="/admin/posts/new"
                   className="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-lg transition-colors"
@@ -116,20 +108,12 @@ export default async function PostsPage() {
                         )}
                       </div>
                       <p className="text-gray-600 text-sm mb-2">
-                        {post.content.length > 150 
-                          ? `${post.content.substring(0, 150)}...` 
-                          : post.content}
+                        {post.content.length > 200 ? `${post.content.substring(0, 200)}...` : post.content}
                       </p>
                       <div className="flex items-center space-x-4 text-sm text-gray-500">
-                        <span>
-                          {post.author?.name || 'Unknown author'}
-                        </span>
+                        <span>{post.author?.name || 'Church Staff'}</span>
                         <span>•</span>
                         <span>{new Date(post.createdAt).toLocaleDateString()}</span>
-                        <span>•</span>
-                        <span>{post._count.comments} comments</span>
-                        <span>•</span>
-                        <span>{post._count.likes} likes</span>
                       </div>
                     </div>
                     <div className="flex items-center space-x-2">
@@ -141,6 +125,7 @@ export default async function PostsPage() {
                       </Link>
                       <Link
                         href={`/blog/${post.id}`}
+                        target="_blank"
                         className="text-gray-600 hover:text-gray-700 text-sm font-medium"
                       >
                         View

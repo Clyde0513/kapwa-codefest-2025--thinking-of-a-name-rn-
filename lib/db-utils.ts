@@ -90,4 +90,21 @@ export const db = {
   async deletePhoto(options: any) {
     return withRetry(() => prisma.photo.delete(options));
   },
+
+  // Settings operations
+  async createSettings(options: any) {
+    return withRetry(() => prisma.settings.create(options));
+  },
+
+  async findUniqueSettings(options: any) {
+    return withRetry(() => prisma.settings.findUnique(options));
+  },
+
+  async updateSettings(options: any) {
+    return withRetry(() => prisma.settings.update(options));
+  },
+
+  async upsertSettings(options: any) {
+    return withRetry(() => prisma.settings.upsert(options));
+  },
 };

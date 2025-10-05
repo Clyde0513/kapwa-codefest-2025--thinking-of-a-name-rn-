@@ -1,13 +1,48 @@
 'use client';
 
 import Image from 'next/image';
+import { useEffect, useState } from 'react';
+
+interface Settings {
+  massScheduleTitle?: string;
+  massSchedulePeriod?: string;
+  massScheduleLocation?: string;
+  massScheduleAddress?: string;
+  massScheduleCityState?: string;
+  massScheduleAdditionalInfo?: string;
+}
 
 export default function MassSchedule() {
+  const [settings, setSettings] = useState<Settings | null>(null);
+
+  useEffect(() => {
+    const fetchSettings = async () => {
+      try {
+        const response = await fetch('/api/settings');
+        const data = await response.json();
+        if (response.ok) {
+          setSettings(data.settings);
+        }
+      } catch (error) {
+        console.error('Error fetching settings:', error);
+      }
+    };
+
+    fetchSettings();
+  }, []);
+
+  // Fallback values
+  const title = settings?.massScheduleTitle || 'Mass Schedule';
+  const period = settings?.massSchedulePeriod || 'October-December 2025';
+  const location = settings?.massScheduleLocation || 'The Filipino Apostolate';
+  const address = settings?.massScheduleAddress || '790 Salem Street';
+  const cityState = settings?.massScheduleCityState || 'Malden, MA 02148';
+  const additionalInfo = settings?.massScheduleAdditionalInfo || 'For Additional Info';
   return (
     <section id="mass" className="py-20 px-4" style={{ backgroundColor: '#FFFDD0' }}>
       <div className="max-w-7xl mx-auto">
         <h2 className="text-4xl font-poppins font-bold text-gray-900 text-center mb-12">
-          Mass Schedule
+          {title}
         </h2>
         
         <div className="max-w-3xl mx-auto">
@@ -16,12 +51,12 @@ export default function MassSchedule() {
             {/* Header */}
             <div className="text-center mb-8">
               <h3 className="text-3xl md:text-4xl font-bold mb-6">
-                October-December 2025
+                {period}
               </h3>
               
               <div className="space-y-3">
                 <p className="text-xl md:text-2xl font-semibold">
-                  The Filipino Apostolate
+                  {location}
                 </p>
                 <p className="text-xl md:text-2xl font-semibold">
                   of the Archdiocese of Boston
@@ -35,10 +70,10 @@ export default function MassSchedule() {
             {/* Location */}
             <div className="text-center mb-8">
               <p className="text-2xl md:text-3xl font-bold mb-2">
-                790 Salem Street
+                {address}
               </p>
               <p className="text-2xl md:text-3xl font-bold">
-                Malden, MA 02148
+                {cityState}
               </p>
             </div>
 
@@ -48,7 +83,7 @@ export default function MassSchedule() {
             {/* Additional Info */}
             <div className="text-center mb-8">
               <p className="text-lg md:text-xl font-semibold">
-                For Additional Info
+                {additionalInfo}
               </p>
             </div>
 
