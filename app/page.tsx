@@ -3,6 +3,9 @@ import Hero from './components/Hero';
 import Events from './components/Events';
 import MassSchedule from './components/MassSchedule';
 import Leadership from './components/Leadership';
+import Galleries from './components/Galleries';
+import Resources from './components/Resources';
+import Footer from './components/Footer';
 
 export default function Home() {
   return (
@@ -12,6 +15,9 @@ export default function Home() {
       <Events />
       <MassSchedule />
       <Leadership />
+      <Galleries />
+      <Resources />
+      <Footer />
       
       {/* Placeholder sections - to be implemented */}
       {/* <section id="about" className="py-20 px-4 bg-gray-50">
@@ -46,12 +52,6 @@ export default function Home() {
           </p>
         </div>
       </section> */}
-
-      <footer className="bg-primary-900 text-white py-8 px-4">
-        <div className="max-w-7xl mx-auto text-center">
-          <p>&copy; 2025 Filipino Apostolate of Boston. All rights reserved.</p>
-        </div>
-      </footer>
     </main>
   );
 }
