@@ -1,42 +1,106 @@
-import { prisma } from '@/lib/prisma';
+import { NextRequest, NextResponse } from 'next/server';
+import { prisma } from '../../../lib/prisma';
+import { z } from 'zod';
 
-export const runtime = 'nodejs';
+const postSchema = z.object({
+  title: z.string().min(1, 'Title is required').max(200, 'Title must be less than 200 characters'),
+  content: z.string().min(1, 'Content is required').max(10000, 'Content must be less than 10,000 characters'),
+  published: z.boolean().default(true),
+  authorId: z.string().uuid().optional(),
+});
 
-export async function GET() {
+export async function POST(req: NextRequest) {
   try {
-    const posts = await prisma.post.findMany({
-      orderBy: { createdAt: 'desc' },
-      include: { _count: { select: { comments: true } }, author: true },
-      take: 20,
+    const body = await req.json();
+    const validatedData = postSchema.parse(body);
+
+    const post = await prisma.post.create({
+      data: {
+        title: validatedData.title,
+        content: validatedData.content,
+        published: validatedData.published,
+        authorId: validatedData.authorId || null,
+      },
+      include: {
+        author: {
+          select: {
+            id: true,
+            name: true,
+            email: true,
+          },
+        },
+      },
     });
-    return Response.json(posts);
-  } catch (e: any) {
-    return new Response(JSON.stringify({ error: e.message }), { status: 500 });
+
+    return NextResponse.json({ ok: true, post }, { status: 201 });
+  } catch (error) {
+    console.error('Error creating post:', error);
+    
+    if (error instanceof z.ZodError) {
+      return NextResponse.json(
+        { error: 'Validation error', details: error.issues },
+        { status: 400 }
+      );
+    }
+
+    return NextResponse.json(
+      { error: 'Failed to create post' },
+      { status: 500 }
+    );
   }
 }
 
-// Minimal body: { "title": string, "content": string, "authorEmail"?: string }
-export async function POST(req: Request) {
+export async function GET(req: NextRequest) {
   try {
-    const body = await req.json();
-    const { title, content, authorEmail } = body ?? {};
-    if (!title || !content) {
-      return new Response(JSON.stringify({ error: 'title and content are required' }), { status: 400 });
-    }
+    const { searchParams } = new URL(req.url);
+    const published = searchParams.get('published');
+    const limit = parseInt(searchParams.get('limit') || '10');
+    const offset = parseInt(searchParams.get('offset') || '0');
 
-    let authorId: string | undefined;
-    if (authorEmail) {
-      const user = await prisma.user.upsert({
-        where: { email: authorEmail },
-        update: {},
-        create: { email: authorEmail, name: 'Auto User' },
-      });
-      authorId = user.id;
-    }
+    const posts = await prisma.post.findMany({
+      where: {
+        published: published === 'true' ? true : published === 'false' ? false : undefined,
+      },
+      take: limit,
+      skip: offset,
+      orderBy: { createdAt: 'desc' },
+      include: {
+        author: {
+          select: {
+            id: true,
+            name: true,
+            email: true,
+          },
+        },
+        _count: {
+          select: {
+            comments: true,
+            likes: true,
+          },
+        },
+      },
+    });
 
-    const post = await prisma.post.create({ data: { title, content, authorId } });
-    return new Response(JSON.stringify(post), { status: 201 });
-  } catch (e: any) {
-    return new Response(JSON.stringify({ error: e.message }), { status: 500 });
+    const total = await prisma.post.count({
+      where: {
+        published: published === 'true' ? true : published === 'false' ? false : undefined,
+      },
+    });
+
+    return NextResponse.json({
+      posts,
+      pagination: {
+        total,
+        limit,
+        offset,
+        hasMore: offset + limit < total,
+      },
+    });
+  } catch (error) {
+    console.error('Error fetching posts:', error);
+    return NextResponse.json(
+      { error: 'Failed to fetch posts' },
+      { status: 500 }
+    );
   }
 }
