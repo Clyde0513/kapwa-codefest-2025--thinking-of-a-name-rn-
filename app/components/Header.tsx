@@ -69,7 +69,7 @@ export default function Header() {
                 </Link>
               </li>
               <li className="group">
-                <Link href="#leadership" className="font-poppins text-lg font-light text-white/95 hover:text-white transition-all flex items-center gap-1.5 group-hover:scale-105 transform duration-200">
+                <Link href="/#leadership" className="font-poppins text-lg font-light text-white/95 hover:text-white transition-all flex items-center gap-1.5 group-hover:scale-105 transform duration-200">
                   Leadership
                   {/* <svg className="w-4 h-4 opacity-75 group-hover:opacity-100 transition-opacity" fill="currentColor" viewBox="0 0 20 20">
                     <path fillRule="evenodd" d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z" clipRule="evenodd" />
@@ -77,7 +77,7 @@ export default function Header() {
                 </Link>
               </li>
               <li className="group">
-                <Link href="#galleries" className="font-poppins text-lg font-light text-white/95 hover:text-white transition-all flex items-center gap-1.5 group-hover:scale-105 transform duration-200">
+                <Link href="/#galleries" className="font-poppins text-lg font-light text-white/95 hover:text-white transition-all flex items-center gap-1.5 group-hover:scale-105 transform duration-200">
                   Galleries
                   {/* <svg className="w-4 h-4 opacity-75 group-hover:opacity-100 transition-opacity" fill="currentColor" viewBox="0 0 20 20">
                     <path fillRule="evenodd" d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z" clipRule="evenodd" />
@@ -85,7 +85,7 @@ export default function Header() {
                 </Link>
               </li>
               <li className="group">
-                <Link href="#events" className="font-poppins text-lg font-light text-white/95 hover:text-white transition-all flex items-center gap-1.5 group-hover:scale-105 transform duration-200">
+                <Link href="/#events" className="font-poppins text-lg font-light text-white/95 hover:text-white transition-all flex items-center gap-1.5 group-hover:scale-105 transform duration-200">
                   Events
                   {/* <svg className="w-4 h-4 opacity-75 group-hover:opacity-100 transition-opacity" fill="currentColor" viewBox="0 0 20 20">
                     <path fillRule="evenodd" d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z" clipRule="evenodd" />
@@ -145,17 +145,17 @@ export default function Header() {
                 </Link>
               </li>
               <li>
-                <Link href="#leadership" className="block font-poppins font-medium hover:text-gray-200 transition-colors">
+                <Link href="/#leadership" className="block font-poppins font-medium hover:text-gray-200 transition-colors">
                   Leadership
                 </Link>
               </li>
               <li>
-                <Link href="#galleries" className="block font-poppins font-medium hover:text-gray-200 transition-colors">
+                <Link href="/#galleries" className="block font-poppins font-medium hover:text-gray-200 transition-colors">
                   Galleries
                 </Link>
               </li>
               <li>
-                <Link href="#events" className="block font-poppins font-medium hover:text-gray-200 transition-colors">
+                <Link href="/#events" className="block font-poppins font-medium hover:text-gray-200 transition-colors">
                   Events
                 </Link>
               </li>
