@@ -3,9 +3,9 @@ import { prisma } from '@/lib/prisma';
 export const runtime = 'nodejs';
 
 // GET /api/events/[id] - Get a single event by ID
-export async function GET(req: Request, { params }: { params: { id: string } }) {
+export async function GET(req: Request, { params }: { params: Promise<{ id: string }> }) {
   try {
-    const { id } = params;
+    const { id } = await params;
 
     const event = await prisma.event.findUnique({
       where: { id },
@@ -31,9 +31,9 @@ export async function GET(req: Request, { params }: { params: { id: string } }) 
 }
 
 // PATCH /api/events/[id] - Update an event
-export async function PATCH(req: Request, { params }: { params: { id: string } }) {
+export async function PATCH(req: Request, { params }: { params: Promise<{ id: string }> }) {
   try {
-    const { id } = params;
+    const { id } = await params;
     const body = await req.json();
     const { title, startsAt, endsAt, allDay, location, description, url, gcalEventId, gcalCalendarId } = body;
 
@@ -80,9 +80,9 @@ export async function PATCH(req: Request, { params }: { params: { id: string } }
 }
 
 // DELETE /api/events/[id] - Delete an event
-export async function DELETE(req: Request, { params }: { params: { id: string } }) {
+export async function DELETE(req: Request, { params }: { params: Promise<{ id: string }> }) {
   try {
-    const { id } = params;
+    const { id } = await params;
 
     // Check if event exists
     const existingEvent = await prisma.event.findUnique({

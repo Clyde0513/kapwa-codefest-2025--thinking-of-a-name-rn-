@@ -1,6 +1,7 @@
 'use client';
 
 import { useState } from 'react';
+import Link from 'next/link';
 
 export default function EventAPITestPage() {
   const [response, setResponse] = useState<string>('');
@@ -204,7 +205,7 @@ export default function EventAPITestPage() {
 
             <div>
               <h3 className="font-semibold">4. Update Event</h3>
-              <p className="text-sm">Updates an existing event's title and description (will prompt for ID).</p>
+              <p className="text-sm">Updates an existing event&apos;s title and description (will prompt for ID).</p>
             </div>
 
             <div>
@@ -217,14 +218,14 @@ export default function EventAPITestPage() {
             <h3 className="font-semibold text-blue-900 mb-2">Quick Links</h3>
             <ul className="space-y-1 text-sm text-blue-700">
               <li>
-                <a href="/admin/events" className="underline hover:text-blue-900">
+                <Link href="/admin/events" className="underline hover:text-blue-900">
                   → Event Admin Dashboard
-                </a>
+                </Link>
               </li>
               <li>
-                <a href="/" className="underline hover:text-blue-900">
+                <Link href="/" className="underline hover:text-blue-900">
                   → Main Page (with Calendar)
-                </a>
+                </Link>
               </li>
             </ul>
           </div>
