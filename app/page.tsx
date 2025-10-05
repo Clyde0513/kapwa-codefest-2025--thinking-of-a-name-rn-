@@ -18,6 +18,11 @@ export default function Home() {
             <h2 className="text-3xl font-poppins mb-6">Latest News</h2>
       {/* BlogList is a server component that fetches posts */}
       <BlogList limit={3} />
+      <div className="flex justify-center mt-8">
+        <a href="/blog" className="bg-red-600 hover:bg-red-700 text-white font-bold px-12 py-4 rounded-full transition-all text-xl font-poppins border-4 border-white shadow-lg">
+          View all posts
+        </a>
+      </div>
       </section>
       <Events />
       <MassSchedule />
