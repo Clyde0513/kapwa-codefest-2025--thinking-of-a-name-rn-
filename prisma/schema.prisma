@@ -119,22 +119,26 @@ model Like {
 
 model Photo {
   id           String   @id @default(uuid())
+  postId       String?  // FK to posts(id) or gallery_id/event_id
+  post         Post?    @relation(fields: [postId], references: [id])
+  
+  // Cloudinary fields
+  publicId     String   // "folder/name_xxx" - Cloudinary public_id
+  url          String   // Full Cloudinary URL
+  width        Int
+  height       Int
+  format       String   // jpg, png, webp, etc.
+  bytes        Int      // File size in bytes
+  
+  // Optional metadata
+  caption      String?
   uploaderId   String?
   uploader     User?    @relation(fields: [uploaderId], references: [id])
-
-  // If attaching to a post/gallery
-  postId       String?
-  post         Post?    @relation(fields: [postId], references: [id])
-
-  // Cloudinary fields
-  url          String
-  publicId     String   // Cloudinary public_id
-  width        Int?
-  height       Int?
-  caption      String?
 
   createdAt    DateTime @default(now())
 
   @@index([postId])
+  @@index([publicId])
+  @@index([createdAt])
 }
 
