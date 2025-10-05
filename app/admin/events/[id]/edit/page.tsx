@@ -1,12 +1,16 @@
 'use client';
 
-import { useState } from 'react';
-import { useRouter } from 'next/navigation';
+import { useState, useEffect } from 'react';
+import { useRouter, useParams } from 'next/navigation';
 import Link from 'next/link';
 
-export default function NewEventPage() {
+export default function EditEventPage() {
   const router = useRouter();
+  const params = useParams();
+  const eventId = params.id as string;
+  
   const [loading, setLoading] = useState(false);
+  const [fetching, setFetching] = useState(true);
   const [formData, setFormData] = useState({
     title: '',
     description: '',
@@ -15,6 +19,46 @@ export default function NewEventPage() {
     location: '',
     allDay: false,
   });
+
+  // Fetch event data
+  useEffect(() => {
+    async function fetchEvent() {
+      try {
+        const response = await fetch(`/api/events/${eventId}`);
+        if (response.ok) {
+          const event = await response.json();
+          
+          // Convert dates to local datetime-local format
+          const startDate = new Date(event.startsAt);
+          const endDate = new Date(event.endsAt);
+          
+          setFormData({
+            title: event.title,
+            description: event.description || '',
+            startsAt: event.allDay 
+              ? startDate.toISOString().split('T')[0]
+              : startDate.toISOString().slice(0, 16),
+            endsAt: event.allDay
+              ? endDate.toISOString().split('T')[0]
+              : endDate.toISOString().slice(0, 16),
+            location: event.location || '',
+            allDay: event.allDay,
+          });
+        } else {
+          alert('Failed to load event');
+          router.push('/admin/events');
+        }
+      } catch (error) {
+        console.error('Error fetching event:', error);
+        alert('An error occurred while loading the event');
+        router.push('/admin/events');
+      } finally {
+        setFetching(false);
+      }
+    }
+
+    fetchEvent();
+  }, [eventId, router]);
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -72,8 +116,8 @@ export default function NewEventPage() {
         endsAt = endDate.toISOString();
       }
 
-      const response = await fetch('/api/events', {
-        method: 'POST',
+      const response = await fetch(`/api/events/${eventId}`, {
+        method: 'PATCH',
         headers: {
           'Content-Type': 'application/json',
         },
@@ -88,16 +132,40 @@ export default function NewEventPage() {
       });
 
       if (response.ok) {
-        const result = await response.json();
         router.push('/admin/events');
         router.refresh();
       } else {
-        alert('Failed to create event. Please try again.');
+        alert('Failed to update event. Please try again.');
       }
     } catch (error) {
-      console.error('Error creating event:', error);
+      console.error('Error updating event:', error);
       alert('An error occurred. Please try again.');
     } finally {
+      setLoading(false);
+    }
+  };
+
+  const handleDelete = async () => {
+    if (!confirm('Are you sure you want to delete this event? This action cannot be undone.')) {
+      return;
+    }
+
+    setLoading(true);
+    try {
+      const response = await fetch(`/api/events/${eventId}`, {
+        method: 'DELETE',
+      });
+
+      if (response.ok) {
+        router.push('/admin/events');
+        router.refresh();
+      } else {
+        alert('Failed to delete event. Please try again.');
+        setLoading(false);
+      }
+    } catch (error) {
+      console.error('Error deleting event:', error);
+      alert('An error occurred. Please try again.');
       setLoading(false);
     }
   };
@@ -110,18 +178,13 @@ export default function NewEventPage() {
     }));
   };
 
-  // Set default times
-  const setDefaultTimes = () => {
-    const now = new Date();
-    const startTime = new Date(now.getTime() + 7 * 24 * 60 * 60 * 1000); // Next week
-    const endTime = new Date(startTime.getTime() + 2 * 60 * 60 * 1000); // 2 hours later
-    
-    setFormData(prev => ({
-      ...prev,
-      startsAt: startTime.toISOString().slice(0, 16),
-      endsAt: endTime.toISOString().slice(0, 16),
-    }));
-  };
+  if (fetching) {
+    return (
+      <div className="min-h-screen bg-gray-50 flex items-center justify-center">
+        <div className="text-gray-600">Loading event...</div>
+      </div>
+    );
+  }
 
   return (
     <div className="min-h-screen bg-gray-50">
@@ -135,9 +198,9 @@ export default function NewEventPage() {
                 <span>›</span>
                 <Link href="/admin/events" className="hover:text-white">Events</Link>
                 <span>›</span>
-                <span className="text-white">New Event</span>
+                <span className="text-white">Edit Event</span>
               </nav>
-              <h1 className="text-2xl font-bold text-white mt-2">Create New Event</h1>
+              <h1 className="text-2xl font-bold text-white mt-2">Edit Event</h1>
             </div>
             <Link
               href="/admin/events"
@@ -173,9 +236,6 @@ export default function NewEventPage() {
                   className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
                   placeholder="e.g., Sunday Morning Service, Youth Group Meeting, Community Dinner"
                 />
-                <p className="text-sm text-gray-500 mt-1">
-                  Choose a clear, descriptive title that tells people what the event is
-                </p>
               </div>
 
               {/* Description */}
@@ -190,14 +250,8 @@ export default function NewEventPage() {
                   onChange={handleInputChange}
                   rows={6}
                   className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
-                  placeholder="Describe what will happen at this event, who should attend, and any important details...
-
-Example:
-Join us for our monthly community dinner! This is a great opportunity to meet new people and enjoy a home-cooked meal together. All are welcome - bring your family and friends. We'll have games for the kids and good conversation for adults."
+                  placeholder="Describe what will happen at this event, who should attend, and any important details..."
                 />
-                <p className="text-sm text-gray-500 mt-1">
-                  Help people understand what to expect and why they should come
-                </p>
               </div>
             </div>
           </div>
@@ -222,13 +276,6 @@ Join us for our monthly community dinner! This is a great opportunity to meet ne
                 <label htmlFor="allDay" className="ml-2 text-sm text-gray-700">
                   All day event
                 </label>
-                <button
-                  type="button"
-                  onClick={setDefaultTimes}
-                  className="ml-4 text-sm text-blue-600 hover:text-blue-700"
-                >
-                  Set example times
-                </button>
               </div>
 
               {/* Date & Time Fields */}
@@ -280,36 +327,33 @@ Join us for our monthly community dinner! This is a great opportunity to meet ne
                   className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
                   placeholder="e.g., Main Sanctuary, Community Hall, 123 Church Street"
                 />
-                <p className="text-sm text-gray-500 mt-1">
-                  Include the building, room, or address where the event will take place
-                </p>
               </div>
             </div>
           </div>
 
-
           {/* Actions */}
           <div className="flex items-center justify-between">
-            <Link
-              href="/admin/events"
-              className="text-gray-600 hover:text-gray-700 font-medium"
+            <button
+              type="button"
+              onClick={handleDelete}
+              disabled={loading}
+              className="px-6 py-2 bg-red-600 hover:bg-red-700 disabled:bg-gray-400 text-white rounded-lg transition-colors"
             >
-              ← Back to Events
-            </Link>
+              Delete Event
+            </button>
             <div className="flex space-x-4">
-              <button
-                type="button"
-                onClick={() => router.push('/admin/events')}
-                className="px-6 py-2 border border-gray-300 rounded-lg text-gray-700 hover:bg-gray-50 transition-colors"
+              <Link
+                href="/admin/events"
+                className="px-6 py-2 border border-gray-300 rounded-lg text-gray-700 hover:bg-gray-50 transition-colors inline-block"
               >
-                Save as Draft
-              </button>
+                Cancel
+              </Link>
               <button
                 type="submit"
                 disabled={loading || !formData.title.trim() || !formData.startsAt}
                 className="px-6 py-2 bg-green-600 hover:bg-green-700 disabled:bg-gray-400 text-white rounded-lg transition-colors"
               >
-                {loading ? 'Creating...' : 'Create Event'}
+                {loading ? 'Saving...' : 'Save Changes'}
               </button>
             </div>
           </div>
