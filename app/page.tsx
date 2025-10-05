@@ -1,6 +1,8 @@
 import Header from './components/Header';
 import Hero from './components/Hero';
 import Events from './components/Events';
+import MassSchedule from './components/MassSchedule';
+import Leadership from './components/Leadership';
 
 export default function Home() {
   return (
@@ -8,6 +10,8 @@ export default function Home() {
       <Header />
       <Hero />
       <Events />
+      <MassSchedule />
+      <Leadership />
       
       {/* Placeholder sections - to be implemented */}
       {/* <section id="about" className="py-20 px-4 bg-gray-50">
