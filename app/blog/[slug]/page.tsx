@@ -1,5 +1,6 @@
 import { sanityClient } from '../../../lib/sanityClient';
 import { PortableText } from '@portabletext/react';
+import Link from 'next/link';
 
 interface Props {
   params: Promise<{ slug: string }>;
@@ -36,13 +37,13 @@ export default async function PostPage({ params }: Props) {
         <div className="max-w-4xl mx-auto py-12 px-4">
           <div className="text-center">
             <h1 className="text-4xl font-poppins mb-4">Post not found</h1>
-            <p className="text-gray-600">The post you're looking for doesn't exist or has been removed.</p>
-            <a 
+            <p className="text-gray-600">The post you&apos;re looking for doesn&apos;t exist or has been removed.</p>
+            <Link 
               href="/blog" 
               className="inline-block mt-4 bg-blue-600 text-white px-6 py-2 rounded-lg hover:bg-blue-700"
             >
               Back to Blog
-            </a>
+            </Link>
           </div>
         </div>
       </div>
@@ -55,6 +56,7 @@ export default async function PostPage({ params }: Props) {
         <article className="prose prose-lg max-w-none">
           {post.mainImage && (
             <div className="mb-8">
+              {/* eslint-disable-next-line @next/next/no-img-element */}
               <img
                 src={post.mainImage}
                 alt={post.title}

@@ -59,6 +59,14 @@ export const db = {
     return withRetry(() => prisma.post.findUnique(options));
   },
 
+  async updatePost(options: any) {
+    return withRetry(() => prisma.post.update(options));
+  },
+
+  async deletePost(options: any) {
+    return withRetry(() => prisma.post.delete(options));
+  },
+
   async createPhoto(options: any) {
     return withRetry(() => prisma.photo.create(options));
   },

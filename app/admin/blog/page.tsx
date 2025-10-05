@@ -88,7 +88,7 @@ export default async function BlogManagementPage() {
               <h3 className="text-lg font-medium text-blue-900">How to Create Blog Posts</h3>
               <div className="mt-2 text-blue-800">
                 <ol className="list-decimal list-inside space-y-1">
-                  <li>Click "Create New Post" button above to open the blog editor</li>
+                  <li>Click &quot;Create New Post&quot; button above to open the blog editor</li>
                   <li>Add a title, write your content, and upload images</li>
                   <li>Add an excerpt (short summary) for the blog listing</li>
                   <li>Choose to publish immediately or save as draft</li>
@@ -165,6 +165,7 @@ export default async function BlogManagementPage() {
                   </div>
                   {post.mainImage && (
                     <div className="mt-3">
+                      {/* eslint-disable-next-line @next/next/no-img-element */}
                       <img
                         src={post.mainImage}
                         alt={post.title}
@@ -182,9 +183,9 @@ export default async function BlogManagementPage() {
         <div className="mt-8 bg-gray-50 rounded-lg p-6">
           <h3 className="text-lg font-medium text-gray-900 mb-3">Need Help?</h3>
           <div className="space-y-2 text-sm text-gray-600">
-            <p>• <strong>Creating Posts:</strong> Use the "Create New Post" button to open the professional blog editor</p>
-            <p>• <strong>Editing Posts:</strong> Click "Edit" next to any post to modify it</p>
-            <p>• <strong>Viewing Posts:</strong> Click "View" to see how your post appears on the website</p>
+            <p>• <strong>Creating Posts:</strong> Use the &quot;Create New Post&quot; button to open the professional blog editor</p>
+            <p>• <strong>Editing Posts:</strong> Click &quot;Edit&quot; next to any post to modify it</p>
+            <p>• <strong>Viewing Posts:</strong> Click &quot;View&quot; to see how your post appears on the website</p>
             <p>• <strong>Rich Content:</strong> The blog editor supports images, formatting, and more</p>
             <p>• <strong>SEO Friendly:</strong> All posts are automatically optimized for search engines</p>
           </div>

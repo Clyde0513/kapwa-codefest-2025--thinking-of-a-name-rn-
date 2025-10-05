@@ -1,5 +1,6 @@
 import Header from '../components/Header';
 import { sanityClient } from '../../lib/sanityClient';
+import Link from 'next/link';
 
 export default async function BlogPage() {
   // Fetch posts from Sanity CMS
@@ -26,12 +27,12 @@ export default async function BlogPage() {
         {posts.length === 0 ? (
           <div className="text-center py-12">
             <p className="text-gray-600">No posts found. Create your first post in the Sanity Studio!</p>
-            <a 
+            <Link 
               href="/studio" 
               className="inline-block mt-4 bg-blue-600 text-white px-6 py-2 rounded-lg hover:bg-blue-700"
             >
               Open Sanity Studio
-            </a>
+            </Link>
           </div>
         ) : (
           <div className="space-y-8">
@@ -40,6 +41,7 @@ export default async function BlogPage() {
                 <div className="flex flex-col md:flex-row gap-6">
                   {post.mainImage && (
                     <div className="md:w-64 flex-shrink-0">
+                      {/* eslint-disable-next-line @next/next/no-img-element */}
                       <img
                         src={post.mainImage}
                         alt={post.title}
