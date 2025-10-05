@@ -71,7 +71,7 @@ export async function GET(req: NextRequest) {
       };
     }
 
-    const events = await prisma.event.findMany({
+    const events = await db.findManyEvents({
       where: whereClause,
       take: limit,
       skip: offset,
@@ -87,9 +87,9 @@ export async function GET(req: NextRequest) {
       },
     });
 
-    const total = await prisma.event.count({
+    const total = await db.countEvents({
       where: whereClause,
-    });
+    }) as number;
 
     return NextResponse.json({
       events,
