@@ -1,4 +1,4 @@
-import { fetchPostBySlug } from '/Users/aliciayu/kapwa-codefest-2025--thinking-of-a-name-rn-/lib/sanityClient';
+import { fetchPostBySlug } from '../../../lib/sanityClient';
 
 interface Props {
   params: { slug: string };
