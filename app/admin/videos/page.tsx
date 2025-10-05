@@ -1,9 +1,9 @@
 import Link from 'next/link';
-import PhotosManager from './PhotosManager';
+import VideosManager from './VideosManager';
 
-export const metadata = { title: 'Manage Photos' };
+export const metadata = { title: 'Manage Videos' };
 
-export default function AdminPhotosPage() {
+export default function AdminVideosPage() {
   return (
     <div className="min-h-screen bg-gray-50">
       {/* Header */}
@@ -14,10 +14,10 @@ export default function AdminPhotosPage() {
               <nav className="flex items-center space-x-2 text-sm text-white/80">
                 <Link href="/admin" className="hover:text-white">Admin</Link>
                 <span>›</span>
-                <span className="text-white">Photos</span>
+                <span className="text-white">Videos</span>
               </nav>
-              <h1 className="text-2xl font-bold text-white mt-2">Photo Management</h1>
-              <p className="text-white/90 mt-1">Upload and manage your church photos</p>
+              <h1 className="text-2xl font-bold text-white mt-2">Video Management</h1>
+              <p className="text-white/90 mt-1">Upload and manage your church videos</p>
             </div>
             <Link
               href="/admin"
@@ -31,9 +31,9 @@ export default function AdminPhotosPage() {
 
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
         <div className="bg-white rounded-lg shadow-sm border p-6">
-          <h2 className="text-lg font-semibold mb-4">Photo Gallery</h2>
-          <p className="text-sm text-gray-600 mb-6">View, delete, and edit captions for uploaded photos stored in the database.</p>
-          <PhotosManager />
+          <h2 className="text-lg font-semibold mb-4">Video Gallery</h2>
+          <p className="text-sm text-gray-600 mb-6">View, delete, and edit captions for uploaded videos stored in the database.</p>
+          <VideosManager />
         </div>
       </div>
     </div>

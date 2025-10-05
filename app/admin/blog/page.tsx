@@ -26,22 +26,22 @@ export default async function BlogManagementPage() {
   return (
     <div className="min-h-screen bg-gray-50">
       {/* Header */}
-      <header className="bg-white shadow-sm border-b">
+      <header className="bg-gradient-to-r from-[#7A0000] to-[#A01010] shadow-sm border-b">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="flex items-center justify-between py-6">
             <div>
-              <nav className="flex items-center space-x-2 text-sm text-gray-500">
-                <Link href="/admin" className="hover:text-gray-700">Admin</Link>
+              <nav className="flex items-center space-x-2 text-sm text-white/80">
+                <Link href="/admin" className="hover:text-white">Admin</Link>
                 <span>›</span>
-                <span className="text-gray-900">Blog Management</span>
+                <span className="text-white">Blog Management</span>
               </nav>
-              <h1 className="text-2xl font-bold text-gray-900 mt-2">Blog Management</h1>
-              <p className="text-gray-600 mt-1">Create and manage your church blog posts</p>
+              <h1 className="text-2xl font-bold text-white mt-2">Blog Management</h1>
+              <p className="text-white/90 mt-1">Create and manage your church blog posts</p>
             </div>
             <div className="flex space-x-4">
               <Link
                 href="/admin"
-                className="bg-gray-100 hover:bg-gray-200 text-gray-700 px-4 py-2 rounded-lg transition-colors"
+                className="bg-white/10 hover:bg-white/20 text-white px-4 py-2 rounded-lg transition-colors border border-white/20"
               >
                 Back to Admin
               </Link>
@@ -179,17 +179,6 @@ export default async function BlogManagementPage() {
           </div>
         </div>
 
-        {/* Help Section */}
-        <div className="mt-8 bg-gray-50 rounded-lg p-6">
-          <h3 className="text-lg font-medium text-gray-900 mb-3">Need Help?</h3>
-          <div className="space-y-2 text-sm text-gray-600">
-            <p>• <strong>Creating Posts:</strong> Use the &quot;Create New Post&quot; button to open the professional blog editor</p>
-            <p>• <strong>Editing Posts:</strong> Click &quot;Edit&quot; next to any post to modify it</p>
-            <p>• <strong>Viewing Posts:</strong> Click &quot;View&quot; to see how your post appears on the website</p>
-            <p>• <strong>Rich Content:</strong> The blog editor supports images, formatting, and more</p>
-            <p>• <strong>SEO Friendly:</strong> All posts are automatically optimized for search engines</p>
-          </div>
-        </div>
       </div>
     </div>
   );

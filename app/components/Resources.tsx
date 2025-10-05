@@ -40,7 +40,7 @@ export default function Resources() {
   ];
 
   return (
-    <section id="resources" className="py-20 px-4" style={{ backgroundColor: '#FFFDD0' }}>
+    <section id="resources" className="py-20 px-4" style={{ backgroundColor: '#faecc8' }}>
       <div className="max-w-4xl mx-auto">
         {/* Title */}
         <h2 className="text-4xl md:text-5xl font-poppins font-bold text-gray-900 text-center mb-8">

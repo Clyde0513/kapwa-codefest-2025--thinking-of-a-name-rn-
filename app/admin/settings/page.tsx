@@ -209,21 +209,21 @@ export default function WebsiteSettingsPage() {
   return (
     <div className="min-h-screen bg-gray-50">
       {/* Header */}
-      <header className="bg-white shadow-sm border-b">
+      <header className="bg-gradient-to-r from-[#7A0000] to-[#A01010] shadow-sm border-b">
         <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="flex items-center justify-between py-6">
             <div>
-              <nav className="flex items-center space-x-2 text-sm text-gray-500">
-                <Link href="/admin" className="hover:text-gray-700">Admin</Link>
+              <nav className="flex items-center space-x-2 text-sm text-white/80">
+                <Link href="/admin" className="hover:text-white">Admin</Link>
                 <span>›</span>
-                <span className="text-gray-900">Website Settings</span>
+                <span className="text-white">Website Settings</span>
               </nav>
-              <h1 className="text-2xl font-bold text-gray-900 mt-2">Website Settings</h1>
-              <p className="text-gray-600 mt-1">Update your church&apos;s website information</p>
+              <h1 className="text-2xl font-bold text-white mt-2">Website Settings</h1>
+              <p className="text-white/90 mt-1">Update your church&apos;s website information</p>
             </div>
             <Link
               href="/"
-              className="bg-gray-100 hover:bg-gray-200 text-gray-700 px-4 py-2 rounded-lg transition-colors"
+              className="bg-white/10 hover:bg-white/20 text-white px-4 py-2 rounded-lg transition-colors border border-white/20"
             >
               Preview Website
             </Link>
@@ -894,19 +894,6 @@ export default function WebsiteSettingsPage() {
             </div>
           </div>
 
-          {/* Help Section */}
-          <div className="bg-blue-50 rounded-lg border border-blue-200">
-            <div className="p-6">
-              <h3 className="text-lg font-medium text-blue-900 mb-2">💡 Tips for Great Website Content</h3>
-              <ul className="space-y-2 text-sm text-blue-800">
-                <li>• <strong>Keep it welcoming:</strong> Use warm, inviting language that makes visitors feel welcome</li>
-                <li>• <strong>Be specific:</strong> Include exact times, addresses, and contact information</li>
-                <li>• <strong>Tell your story:</strong> Share what makes your church special and unique</li>
-                <li>• <strong>Keep it current:</strong> Update information regularly, especially service times and contact details</li>
-                <li>• <strong>Use simple language:</strong> Write in a way that everyone can understand</li>
-              </ul>
-            </div>
-          </div>
 
           {/* Save Button */}
           <div className="flex items-center justify-between">

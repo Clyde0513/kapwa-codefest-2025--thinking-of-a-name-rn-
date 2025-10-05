@@ -97,7 +97,7 @@ export default function Events() {
   const subtitle = settings?.eventsSubtitle || 'Our faith community provides many opportunities to fellowship with each other.\nHere are just a few of our upcoming events!';
 
   return (
-    <section id="events" className="py-20 px-4" style={{ backgroundColor: '#FFFDD0' }}>
+    <section id="events" className="py-20 px-4" style={{ backgroundColor: '#faecc8' }}>
       <div className="max-w-7xl mx-auto">
         <h2 className="text-4xl font-poppins font-bold text-gray-900 text-center mb-4">
           {title}

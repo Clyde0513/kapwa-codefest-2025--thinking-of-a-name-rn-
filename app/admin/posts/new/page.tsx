@@ -7,11 +7,10 @@ import Link from 'next/link';
 export default function NewPostPage() {
   const [title, setTitle] = useState('');
   const [content, setContent] = useState('');
-  const [published, setPublished] = useState(false);
   const [loading, setLoading] = useState(false);
   const router = useRouter();
 
-  const handleSubmit = async (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent, publishNow: boolean) => {
     e.preventDefault();
     setLoading(true);
 
@@ -24,7 +23,7 @@ export default function NewPostPage() {
         body: JSON.stringify({
           title,
           content,
-          published,
+          published: publishNow,
         }),
       });
 
@@ -45,23 +44,23 @@ export default function NewPostPage() {
   return (
     <div className="min-h-screen bg-gray-50">
       {/* Header */}
-      <header className="bg-white shadow-sm border-b">
+      <header className="bg-gradient-to-r from-[#7A0000] to-[#A01010] shadow-sm border-b">
         <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="flex items-center justify-between py-6">
             <div>
-              <nav className="flex items-center space-x-2 text-sm text-gray-500">
-                <Link href="/admin" className="hover:text-gray-700">Admin</Link>
+              <nav className="flex items-center space-x-2 text-sm text-white/80">
+                <Link href="/admin" className="hover:text-white">Admin</Link>
                 <span>›</span>
-                <Link href="/admin/posts" className="hover:text-gray-700">Posts</Link>
+                <Link href="/admin/posts" className="hover:text-white">Posts</Link>
                 <span>›</span>
-                <span className="text-gray-900">New Post</span>
+                <span className="text-white">New Post</span>
               </nav>
-              <h1 className="text-2xl font-bold text-gray-900 mt-2">Create New Blog Post</h1>
-              <p className="text-gray-600 mt-1">Write a new blog post for your church community</p>
+              <h1 className="text-2xl font-bold text-white mt-2">Create New Blog Post</h1>
+              <p className="text-white/90 mt-1">Write a new blog post for your church community</p>
             </div>
             <Link
               href="/admin/posts"
-              className="bg-gray-100 hover:bg-gray-200 text-gray-700 px-4 py-2 rounded-lg transition-colors"
+              className="bg-white/10 hover:bg-white/20 text-white px-4 py-2 rounded-lg transition-colors border border-white/20"
             >
               Back to Posts
             </Link>
@@ -70,7 +69,7 @@ export default function NewPostPage() {
       </header>
 
       <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
-        <form onSubmit={handleSubmit} className="space-y-8">
+        <div className="space-y-8">
           {/* Basic Information */}
           <div className="bg-white rounded-lg shadow-sm border">
             <div className="p-6 border-b">
@@ -108,50 +107,33 @@ export default function NewPostPage() {
                 />
               </div>
 
-              <div className="flex items-center">
-                <input
-                  type="checkbox"
-                  id="published"
-                  checked={published}
-                  onChange={(e) => setPublished(e.target.checked)}
-                  className="h-4 w-4 text-blue-600 focus:ring-blue-500 border-gray-300 rounded"
-                />
-                <label htmlFor="published" className="ml-2 block text-sm text-gray-900">
-                  Publish immediately
-                </label>
-              </div>
             </div>
           </div>
 
-          {/* Help Section */}
-          <div className="bg-blue-50 rounded-lg border border-blue-200">
-            <div className="p-6">
-              <h3 className="text-lg font-medium text-blue-900 mb-2">💡 Writing Tips</h3>
-              <ul className="space-y-2 text-sm text-blue-800">
-                <li>• <strong>Clear titles:</strong> Make your title descriptive and engaging</li>
-                <li>• <strong>Good content:</strong> Write in a conversational tone that connects with your community</li>
-                <li>• <strong>Formatting:</strong> Use paragraphs and line breaks to make your content easy to read</li>
-                <li>• <strong>Draft mode:</strong> Uncheck &quot;Publish immediately&quot; to save as draft and review later</li>
-              </ul>
-            </div>
-          </div>
 
-          {/* Save Button */}
+          {/* Action Buttons */}
           <div className="flex items-center justify-between">
             <div className="text-sm text-gray-500">
-              {published ? 'Post will be published immediately' : 'Post will be saved as draft'}
+              Choose how you want to save your post
             </div>
             <div className="flex items-center space-x-4">
               <button
-                type="submit"
+                onClick={(e) => handleSubmit(e, false)}
+                disabled={loading}
+                className="px-6 py-2 bg-gray-500 hover:bg-gray-600 disabled:bg-gray-400 text-white rounded-lg transition-colors"
+              >
+                {loading ? 'Saving...' : 'Save as Draft'}
+              </button>
+              <button
+                onClick={(e) => handleSubmit(e, true)}
                 disabled={loading}
                 className="px-6 py-2 bg-blue-600 hover:bg-blue-700 disabled:bg-gray-400 text-white rounded-lg transition-colors"
               >
-                {loading ? 'Creating...' : published ? 'Publish Post' : 'Save as Draft'}
+                {loading ? 'Publishing...' : 'Publish Now'}
               </button>
             </div>
           </div>
-        </form>
+        </div>
       </div>
     </div>
   );

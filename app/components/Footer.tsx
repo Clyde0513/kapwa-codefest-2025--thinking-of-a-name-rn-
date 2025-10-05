@@ -53,7 +53,7 @@ export default function Footer() {
           <div className="flex flex-col items-center md:items-start">
             <div className="w-32 h-32 relative mb-4">
               <Image
-                src="/images/catholic_logo.png"
+                src="/images/tiwalaupdated.png"
                 alt={`${siteName} Logo`}
                 width={128}
                 height={128}

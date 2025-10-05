@@ -30,6 +30,7 @@ model User {
   events    Event[]  @relation("EventCreator")
   likes     Like[]
   photos    Photo[]
+  videos    Video[]
 }
 
 model Post {
@@ -49,6 +50,7 @@ model Post {
   comments    Comment[]
   likes       Like[]
   photos      Photo[]
+  videos      Video[]
 
   @@index([authorId])
   @@index([createdAt])
@@ -57,7 +59,7 @@ model Post {
 model Comment {
   id         String    @id @default(uuid())
   postId     String
-  post       Post      @relation(fields: [postId], references: [id])
+  post       Post      @relation(fields: [postId], references: [id], onDelete: Cascade)
   authorId   String?
   author     User?     @relation(fields: [authorId], references: [id])
   content    String
@@ -104,9 +106,9 @@ model Like {
 
   // polymorphic: like a post OR a comment
   postId     String?
-  post       Post?    @relation(fields: [postId], references: [id])
+  post       Post?    @relation(fields: [postId], references: [id], onDelete: Cascade)
   commentId  String?
-  comment    Comment? @relation(fields: [commentId], references: [id])
+  comment    Comment? @relation(fields: [commentId], references: [id], onDelete: Cascade)
 
   createdAt  DateTime @default(now())
 
@@ -120,7 +122,7 @@ model Like {
 model Photo {
   id           String   @id @default(uuid())
   postId       String?  // FK to posts(id) or gallery_id/event_id
-  post         Post?    @relation(fields: [postId], references: [id])
+  post         Post?    @relation(fields: [postId], references: [id], onDelete: Cascade)
   
   // Cloudinary fields
   publicId     String   // "folder/name_xxx" - Cloudinary public_id
@@ -129,6 +131,32 @@ model Photo {
   height       Int
   format       String   // jpg, png, webp, etc.
   bytes        Int      // File size in bytes
+  
+  // Optional metadata
+  caption      String?
+  uploaderId   String?
+  uploader     User?    @relation(fields: [uploaderId], references: [id])
+
+  createdAt    DateTime @default(now())
+
+  @@index([postId])
+  @@index([publicId])
+  @@index([createdAt])
+}
+
+model Video {
+  id           String   @id @default(uuid())
+  postId       String?  // FK to posts(id) or gallery_id/event_id
+  post         Post?    @relation(fields: [postId], references: [id], onDelete: Cascade)
+  
+  // Cloudinary fields
+  publicId     String   // "folder/name_xxx" - Cloudinary public_id
+  url          String   // Full Cloudinary URL
+  width        Int
+  height       Int
+  format       String   // mp4, webm, etc.
+  bytes        Int      // File size in bytes
+  duration     Float?   // Duration in seconds
   
   // Optional metadata
   caption      String?

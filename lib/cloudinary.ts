@@ -14,6 +14,7 @@ export type CloudinaryUploadResult = {
   height: number;
   format: string;
   bytes: number;
+  duration?: number;
   blurDataUrl?: string;
 };
 
@@ -51,7 +52,7 @@ export const TRANSFORMS = {
   AVIF: "f_avif,q_auto",
 } as const;
 
-export async function uploadToCloudinary(file: File): Promise<CloudinaryUploadResult> {
+export async function uploadToCloudinary(file: File, resourceType: 'image' | 'video' = 'image'): Promise<CloudinaryUploadResult> {
   // 1) Get signature from our API
   const sigRes = await fetch('/api/uploads/sign', {
     method: 'POST',
@@ -79,7 +80,7 @@ export async function uploadToCloudinary(file: File): Promise<CloudinaryUploadRe
     form.append('folder', sig.folder);
   }
 
-  const cloudUrl = `https://api.cloudinary.com/v1_1/${sig.cloudName}/auto/upload`;
+  const cloudUrl = `https://api.cloudinary.com/v1_1/${sig.cloudName}/${resourceType}/upload`;
   
   const upRes = await fetch(cloudUrl, {
     method: 'POST',
@@ -100,6 +101,7 @@ export async function uploadToCloudinary(file: File): Promise<CloudinaryUploadRe
     height: payload.height as number,
     format: payload.format as string,
     bytes: payload.bytes as number,
+    duration: payload.duration,
     blurDataUrl: payload.placeholder,
   };
 }
@@ -126,6 +128,34 @@ export async function savePhotoToDatabase(photoData: {
 
   if (!res.ok) {
     throw new Error('Failed to save photo to database');
+  }
+
+  return res.json();
+}
+
+// Helper function to create a video record in the database
+export async function saveVideoToDatabase(videoData: {
+  publicId: string;
+  url: string;
+  width: number;
+  height: number;
+  format: string;
+  bytes: number;
+  duration?: number;
+  caption?: string;
+  postId?: string;
+  uploaderId?: string;
+}) {
+  const res = await fetch('/api/videos', {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+    },
+    body: JSON.stringify(videoData),
+  });
+
+  if (!res.ok) {
+    throw new Error('Failed to save video to database');
   }
 
   return res.json();

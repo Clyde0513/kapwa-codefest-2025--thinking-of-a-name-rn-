@@ -4,21 +4,21 @@ export default function HelpPage() {
   return (
     <div className="min-h-screen bg-gray-50">
       {/* Header */}
-      <header className="bg-white shadow-sm border-b">
+      <header className="bg-gradient-to-r from-[#7A0000] to-[#A01010] shadow-sm border-b">
         <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="flex items-center justify-between py-6">
             <div>
-              <nav className="flex items-center space-x-2 text-sm text-gray-500">
-                <Link href="/admin" className="hover:text-gray-700">Admin</Link>
+              <nav className="flex items-center space-x-2 text-sm text-white/80">
+                <Link href="/admin" className="hover:text-white">Admin</Link>
                 <span>›</span>
-                <span className="text-gray-900">Help & Support</span>
+                <span className="text-white">Help & Support</span>
               </nav>
-              <h1 className="text-2xl font-bold text-gray-900 mt-2">Help & Support</h1>
-              <p className="text-gray-600 mt-1">Learn how to manage your church&apos;s website</p>
+              <h1 className="text-2xl font-bold text-white mt-2">Help & Support</h1>
+              <p className="text-white/90 mt-1">Learn how to manage your church&apos;s website</p>
             </div>
             <Link
               href="/admin"
-              className="bg-gray-100 hover:bg-gray-200 text-gray-700 px-4 py-2 rounded-lg transition-colors"
+              className="bg-white/10 hover:bg-white/20 text-white px-4 py-2 rounded-lg transition-colors border border-white/20"
             >
               Back to Admin
             </Link>
@@ -130,7 +130,7 @@ export default function HelpPage() {
           <div className="bg-white rounded-lg shadow-sm border">
             <div className="p-6 border-b">
               <h2 className="text-xl font-semibold text-gray-900">✨ Best Practices</h2>
-              <p className="text-gray-600 mt-1">Tips to make your website more effective</p>
+              <p className="text-gray-600 mt-1">Guidance for using your website effectively</p>
             </div>
             <div className="p-6">
               <div className="grid grid-cols-1 md:grid-cols-2 gap-8">

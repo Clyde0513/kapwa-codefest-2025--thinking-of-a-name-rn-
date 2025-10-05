@@ -19,7 +19,8 @@ export default function EditPostPage() {
       try {
         const response = await fetch(`/api/posts/${postId}`);
         if (response.ok) {
-          const post = await response.json();
+          const data = await response.json();
+          const post = data.post;
           setTitle(post.title);
           setContent(post.content);
           setPublished(post.published);
@@ -86,23 +87,23 @@ export default function EditPostPage() {
   return (
     <div className="min-h-screen bg-gray-50">
       {/* Header */}
-      <header className="bg-white shadow-sm border-b">
+      <header className="bg-gradient-to-r from-[#7A0000] to-[#A01010] shadow-sm border-b">
         <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="flex items-center justify-between py-6">
             <div>
-              <nav className="flex items-center space-x-2 text-sm text-gray-500">
-                <Link href="/admin" className="hover:text-gray-700">Admin</Link>
+              <nav className="flex items-center space-x-2 text-sm text-white/80">
+                <Link href="/admin" className="hover:text-white">Admin</Link>
                 <span>›</span>
-                <Link href="/admin/posts" className="hover:text-gray-700">Posts</Link>
+                <Link href="/admin/posts" className="hover:text-white">Posts</Link>
                 <span>›</span>
-                <span className="text-gray-900">Edit Post</span>
+                <span className="text-white">Edit Post</span>
               </nav>
-              <h1 className="text-2xl font-bold text-gray-900 mt-2">Edit Blog Post</h1>
-              <p className="text-gray-600 mt-1">Update your blog post content</p>
+              <h1 className="text-2xl font-bold text-white mt-2">Edit Blog Post</h1>
+              <p className="text-white/90 mt-1">Update your blog post content</p>
             </div>
             <Link
               href="/admin/posts"
-              className="bg-gray-100 hover:bg-gray-200 text-gray-700 px-4 py-2 rounded-lg transition-colors"
+              className="bg-white/10 hover:bg-white/20 text-white px-4 py-2 rounded-lg transition-colors border border-white/20"
             >
               Back to Posts
             </Link>

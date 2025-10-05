@@ -91,6 +91,31 @@ export const db = {
     return withRetry(() => prisma.photo.delete(options));
   },
 
+  // Video operations
+  async createVideo(options: any) {
+    return withRetry(() => prisma.video.create(options));
+  },
+
+  async findManyVideos(options: any) {
+    return withRetry(() => prisma.video.findMany(options));
+  },
+
+  async countVideos(options: any) {
+    return withRetry(() => prisma.video.count(options));
+  },
+
+  async findUniqueVideo(options: any) {
+    return withRetry(() => prisma.video.findUnique(options));
+  },
+
+  async updateVideo(options: any) {
+    return withRetry(() => prisma.video.update(options));
+  },
+
+  async deleteVideo(options: any) {
+    return withRetry(() => prisma.video.delete(options));
+  },
+
   // Settings operations
   async createSettings(options: any) {
     return withRetry(() => prisma.settings.create(options));

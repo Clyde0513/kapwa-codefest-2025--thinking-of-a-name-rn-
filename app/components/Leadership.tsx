@@ -59,7 +59,7 @@ export default function Leadership() {
   const financeTreasurers = settings?.financeTreasurers || 'Priscilla Cruz, Gracita Chiefe';
   const financeAuditor = settings?.financeAuditor || 'July Afable';
   return (
-    <section id="leadership" className="py-20 px-4" style={{ backgroundColor: '#FFFDD0' }}>
+    <section id="leadership" className="py-20 px-4" style={{ backgroundColor: '#faecc8' }}>
       <div className="max-w-7xl mx-auto">
         <h2 className="text-4xl font-poppins font-bold text-gray-900 text-center mb-12">
           {title}

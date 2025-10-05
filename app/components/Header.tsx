@@ -39,12 +39,12 @@ export default function Header() {
         <div className="flex justify-between items-center py-4">
           {/* Logo with Text Below - Left Side */}
           <Link href="/" className="flex flex-col items-center gap-1 hover:opacity-90 transition-opacity">
-            <div className="w-24 h-24 sm:w-28 sm:h-28 relative flex-shrink-0 drop-shadow-lg">
+            <div className="w-24 h-24 sm:w-28 sm:h-28 relative flex-shrink-0 drop-shadow-lg -translate-x-2">
               <Image
-                src="/images/catholic_logo.png"
+                src="/images/tiwalaupdated.png"
                 alt={`${siteName} Logo`}
-                width={112}
-                height={112}
+                width={1021}
+                height={1024}
                 className="w-full h-full object-contain"
                 priority
               />
@@ -61,8 +61,8 @@ export default function Header() {
           <nav className="hidden lg:flex flex-1 justify-center">
             <ul className="flex items-center gap-12">
               <li className="group">
-                <Link href="#about" className="font-poppins text-lg font-light text-white/95 hover:text-white transition-all flex items-center gap-1.5 group-hover:scale-105 transform duration-200">
-                  About Us
+                <Link href="/mission" className="font-poppins text-lg font-light text-white/95 hover:text-white transition-all flex items-center gap-1.5 group-hover:scale-105 transform duration-200">
+                  Mission Statement
                   {/* <svg className="w-4 h-4 opacity-75 group-hover:opacity-100 transition-opacity" fill="currentColor" viewBox="0 0 20 20">
                     <path fillRule="evenodd" d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z" clipRule="evenodd" />
                   </svg> */}
@@ -95,18 +95,27 @@ export default function Header() {
             </ul>
           </nav>
 
-          {/* Facebook Icon + Contact Us - Top Right */}
-          <div className="hidden lg:flex items-center gap-3 group hover:scale-105 transform transition-all duration-200">
-            <div className="w-10 h-10 bg-white rounded-full flex items-center justify-center shadow-lg group-hover:shadow-xl transition-shadow">
-              <svg className="w-5 h-5 text-[#1877F2]" fill="currentColor" viewBox="0 0 24 24">
-                <path d="M22 12c0-5.523-4.477-10-10-10S2 6.477 2 12c0 4.991 3.657 9.128 8.438 9.878v-6.987h-2.54V12h2.54V9.797c0-2.506 1.492-3.89 3.777-3.89 1.094 0 2.238.195 2.238.195v2.46h-1.26c-1.243 0-1.63.771-1.63 1.562V12h2.773l-.443 2.89h-2.33v6.988C18.343 21.128 22 16.991 22 12z"/>
-              </svg>
+          {/* Email Icon + Contact Us + Admin Login - Top Right */}
+          <div className="hidden lg:flex items-center gap-6">
+            <div className="flex items-center gap-3 group hover:scale-105 transform transition-all duration-200">
+              <div className="w-10 h-10 bg-white rounded-full flex items-center justify-center shadow-lg group-hover:shadow-xl transition-shadow">
+                <svg className="w-5 h-5 text-gray-700" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3 8l7.89 4.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z" />
+                </svg>
+              </div>
+              <a 
+                href="mailto:manpards@gmail.com" 
+                className="font-poppins text-lg font-light text-white/95 group-hover:text-white transition-colors"
+              >
+                Contact Us
+              </a>
             </div>
+            
             <Link 
-              href="#contact" 
-              className="font-poppins text-lg font-light text-white/95 group-hover:text-white transition-colors"
+              href="/admin/login" 
+              className="bg-white/20 hover:bg-white/30 text-white font-poppins font-medium px-4 py-2 rounded-full transition-all duration-200 border border-white/30 hover:border-white/50"
             >
-              Contact Us
+              Admin Login
             </Link>
           </div>
 
@@ -131,8 +140,8 @@ export default function Header() {
           <nav className="lg:hidden pb-4">
             <ul className="flex flex-col gap-4">
               <li>
-                <Link href="#about" className="block font-poppins font-medium hover:text-gray-200 transition-colors">
-                  About Us
+                <Link href="/mission" className="block font-poppins font-medium hover:text-gray-200 transition-colors">
+                  Mission Statement
                 </Link>
               </li>
               <li>
@@ -151,8 +160,13 @@ export default function Header() {
                 </Link>
               </li>
               <li>
-                <Link href="#contact" className="block font-poppins font-medium hover:text-gray-200 transition-colors">
+                <a href="mailto:manpards@gmail.com" className="block font-poppins font-medium hover:text-gray-200 transition-colors">
                   Contact Us
+                </a>
+              </li>
+              <li>
+                <Link href="/admin/login" className="block font-poppins font-medium hover:text-gray-200 transition-colors">
+                  Admin Login
                 </Link>
               </li>
             </ul>

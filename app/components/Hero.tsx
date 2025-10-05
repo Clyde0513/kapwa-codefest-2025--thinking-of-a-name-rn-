@@ -1,6 +1,7 @@
 'use client';
 
 import Link from 'next/link';
+import Image from 'next/image';
 import { useEffect, useState } from 'react';
 
 interface Settings {
@@ -49,6 +50,18 @@ export default function Hero() {
         backgroundImage: `url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none' fill-rule='evenodd'%3E%3Cg fill='%23ffffff' fill-opacity='1'%3E%3Cpath d='M36 34v-4h-2v4h-4v2h4v4h2v-4h4v-2h-4zm0-30V0h-2v4h-4v2h4v4h2V6h4V4h-4zM6 34v-4H4v4H0v2h4v4h2v-4h4v-2H6zM6 4V0H4v4H0v2h4v4h2V6h4V4H6z'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E")`
       }}></div>
 
+      {/* Bird Silhouette - Right Side Background */}
+      <div className="absolute top-1/2 right-0 transform translate-y-[-50%] translate-x-4 opacity-20 z-0 hidden lg:block">
+        <Image
+          src="/images/pngtree-bird-silhouette-design-png-image_14643388.png"
+          alt="Bird silhouette"
+          width={400}
+          height={300}
+          className="object-contain filter drop-shadow-2xl"
+          priority={false}
+        />
+      </div>
+
       <div className="relative max-w-6xl mx-auto px-6 sm:px-8 lg:px-12 text-center z-10">
         {loading ? (
           <div className="animate-pulse">
@@ -58,18 +71,18 @@ export default function Hero() {
           </div>
         ) : (
           <>
-            <h1 className="font-poppins text-4xl sm:text-5xl lg:text-6xl font-bold mb-6 leading-tight tracking-wide">
+            <h1 className="font-poppins text-4xl sm:text-5xl lg:text-6xl font-bold mb-6 leading-tight tracking-wide animate-fade-in-up opacity-0" style={{animationDelay: '0.2s', animationFillMode: 'forwards'}}>
               Welcome to the {siteName}
             </h1>
             
-            <p className="text-lg sm:text-xl lg:text-2xl mb-12 leading-relaxed font-bold max-w-4xl mx-auto text-gray-800">
+            <p className="text-lg sm:text-xl lg:text-2xl mb-12 leading-relaxed font-bold max-w-4xl mx-auto text-gray-800 animate-fade-in-up opacity-0" style={{animationDelay: '0.4s', animationFillMode: 'forwards'}}>
               {tagline}
             </p>
           </>
         )}
 
         {/* CTA Buttons */}
-        <div className="flex flex-col sm:flex-row gap-5 justify-center items-center mb-6">
+        <div className="flex flex-col sm:flex-row gap-5 justify-center items-center mb-6 animate-fade-in-up opacity-0" style={{animationDelay: '0.6s', animationFillMode: 'forwards'}}>
           <Link
             href="#events"
             className="bg-red-600 hover:bg-red-700 text-white font-bold px-12 py-4 rounded-full transition-all text-xl font-poppins w-full sm:w-auto border-4 border-white shadow-lg"
@@ -85,7 +98,7 @@ export default function Hero() {
         </div>
 
         {/* Leadership Button */}
-        <div className="mt-6">
+        <div className="mt-6 animate-fade-in-up opacity-0" style={{animationDelay: '0.8s', animationFillMode: 'forwards'}}>
           <Link
             href="#leadership"
             className="inline-block bg-yellow-400 hover:bg-yellow-500 text-gray-900 font-bold px-16 py-4 rounded-full transition-all text-xl font-poppins border-4 border-white shadow-lg"

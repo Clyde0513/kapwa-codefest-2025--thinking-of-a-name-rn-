@@ -1,14 +1,64 @@
 import { prisma } from '@/lib/prisma';
+import { NextRequest, NextResponse } from 'next/server';
 
 export const runtime = 'nodejs';
 
-// Minimal body: { "postId": string, "content": string, "authorEmail"?: string }
-export async function POST(req: Request) {
+// GET comments for a specific post
+export async function GET(req: NextRequest) {
   try {
-    const { postId, content, authorEmail } = await req.json();
+    const { searchParams } = new URL(req.url);
+    const postId = searchParams.get('postId');
+    
+    if (!postId) {
+      return NextResponse.json({ error: 'postId is required' }, { status: 400 });
+    }
+
+    const comments = await prisma.comment.findMany({
+      where: { postId },
+      include: {
+        author: {
+          select: {
+            id: true,
+            name: true,
+            email: true,
+          },
+        },
+        replies: {
+          include: {
+            author: {
+              select: {
+                id: true,
+                name: true,
+                email: true,
+              },
+            },
+          },
+          orderBy: { createdAt: 'asc' },
+        },
+      },
+      orderBy: { createdAt: 'desc' },
+    });
+
+    return NextResponse.json({ comments });
+  } catch (error) {
+    console.error('Error fetching comments:', error);
+    return NextResponse.json({ error: 'Failed to fetch comments' }, { status: 500 });
+  }
+}
+
+// POST new comment
+export async function POST(req: NextRequest) {
+  try {
+    const { postId, content, authorEmail, parentId } = await req.json();
 
     if (!postId || !content) {
-      return new Response(JSON.stringify({ error: 'postId and content are required' }), { status: 400 });
+      return NextResponse.json({ error: 'postId and content are required' }, { status: 400 });
+    }
+
+    // Verify post exists
+    const post = await prisma.post.findUnique({ where: { id: postId } });
+    if (!post) {
+      return NextResponse.json({ error: 'Post not found' }, { status: 404 });
     }
 
     let authorId: string | undefined;
@@ -16,20 +66,32 @@ export async function POST(req: Request) {
       const user = await prisma.user.upsert({
         where: { email: authorEmail },
         update: {},
-        create: { email: authorEmail, name: 'Auto User' },
+        create: { email: authorEmail, name: 'Church Member' },
       });
       authorId = user.id;
     }
 
-    const post = await prisma.post.findUnique({ where: { id: postId } });
-    if (!post) return new Response(JSON.stringify({ error: 'post not found' }), { status: 404 });
-
     const comment = await prisma.comment.create({
-      data: { postId, content, authorId },
+      data: { 
+        postId, 
+        content, 
+        authorId,
+        parentId: parentId || null,
+      },
+      include: {
+        author: {
+          select: {
+            id: true,
+            name: true,
+            email: true,
+          },
+        },
+      },
     });
 
-    return new Response(JSON.stringify(comment), { status: 201 });
-  } catch (e: any) {
-    return new Response(JSON.stringify({ error: e.message }), { status: 500 });
+    return NextResponse.json({ comment }, { status: 201 });
+  } catch (error) {
+    console.error('Error creating comment:', error);
+    return NextResponse.json({ error: 'Failed to create comment' }, { status: 500 });
   }
 }

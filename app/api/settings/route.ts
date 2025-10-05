@@ -187,7 +187,7 @@ export async function GET() {
 
       if (settingsRecord && typeof settingsRecord === 'object' && settingsRecord !== null && 'value' in settingsRecord && settingsRecord.value) {
         // Merge saved settings with defaults to ensure all fields are present
-        const savedSettings = settingsRecord.value as WebsiteSettings;
+        const savedSettings = settingsRecord.value as unknown as WebsiteSettings;
         const mergedSettings = {
           ...defaultSettings,
           ...savedSettings,

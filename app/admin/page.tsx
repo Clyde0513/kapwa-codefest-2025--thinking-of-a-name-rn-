@@ -1,12 +1,24 @@
 import Link from 'next/link';
+import { redirect } from 'next/navigation';
 import { db } from '../../lib/db-utils';
 import { sanityClient } from '../../lib/sanityClient';
+import { requireAdminAuth } from '../../lib/auth';
+import LogoutButton from '../../components/LogoutButton';
 
 export default async function AdminDashboard() {
+  // Check authentication with error handling
+  let session;
+  try {
+    session = await requireAdminAuth();
+  } catch (error) {
+    // If no session, redirect to login
+    redirect('/admin/login');
+  }
   // Get quick stats for dashboard with error handling
   let blogPostsCount = 0;
   let eventsCount = 0;
   let photosCount = 0;
+  let videosCount = 0;
   let recentBlogPosts: any[] = [];
   let upcomingEvents: any[] = [];
 
@@ -33,12 +45,14 @@ export default async function AdminDashboard() {
     }));
 
     // Get database stats
-    const [eventsResult, photosResult] = await Promise.all([
+    const [eventsResult, photosResult, videosResult] = await Promise.all([
       db.countEvents({}).catch(() => 0),
       db.countPhotos({}).catch(() => 0),
+      db.countVideos({}).catch(() => 0),
     ]);
     eventsCount = eventsResult as number;
     photosCount = photosResult as number;
+    videosCount = videosResult as number;
 
     const upcomingEvents = await db.findManyEvents({
       take: 5,
@@ -57,13 +71,14 @@ export default async function AdminDashboard() {
   return (
     <div className="min-h-screen bg-gray-50">
       {/* Header */}
-      <header className="bg-white shadow-sm border-b">
+      <header className="bg-gradient-to-r from-[#7A0000] to-[#A01010] shadow-sm border-b">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="flex justify-between items-center py-6">
             <div>
-              <h1 className="text-3xl font-bold text-gray-900">Church Admin</h1>
-              <p className="text-gray-600 mt-1">Manage your church&apos;s website content</p>
-              {blogPostsCount === 0 && eventsCount === 0 && photosCount === 0 && (
+              <h1 className="text-3xl font-bold text-white">Church Admin</h1>
+              <p className="text-white/90 mt-1">Welcome back, {session.name}</p>
+              <p className="text-white/80 text-sm">{session.email}</p>
+              {blogPostsCount === 0 && eventsCount === 0 && photosCount === 0 && videosCount === 0 && (
                 <div className="mt-2 px-3 py-1 bg-yellow-100 text-yellow-800 text-sm rounded-lg inline-block">
                   No content found - create your first blog post or event
                 </div>
@@ -76,12 +91,7 @@ export default async function AdminDashboard() {
               >
                 View Website
               </Link>
-              <Link
-                href="/admin/demo"
-                className="bg-yellow-600 hover:bg-yellow-700 text-white px-4 py-2 rounded-lg transition-colors"
-              >
-                Demo Mode
-              </Link>
+              <LogoutButton />
               <Link
                 href="/admin/help"
                 className="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-lg transition-colors"
@@ -137,13 +147,26 @@ export default async function AdminDashboard() {
               </div>
             </div>
           </div>
+
+          <div className="bg-white p-6 rounded-lg shadow-sm border">
+            <div className="flex items-center">
+              <div className="p-2 bg-red-100 rounded-lg">
+                <svg className="w-6 h-6 text-red-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 10l4.553-2.276A1 1 0 0121 8.618v6.764a1 1 0 01-1.447.894L15 14M5 18h8a2 2 0 002-2V8a2 2 0 00-2-2H5a2 2 0 00-2 2v8a2 2 0 002 2z" />
+                </svg>
+              </div>
+              <div className="ml-4">
+                <p className="text-sm font-medium text-gray-600">Videos</p>
+                <p className="text-2xl font-bold text-gray-900">{videosCount}</p>
+              </div>
+            </div>
+          </div>
         </div>
 
         {/* Quick Actions */}
         <div className="bg-white rounded-lg shadow-sm border mb-8">
           <div className="p-6 border-b">
             <h2 className="text-xl font-semibold text-gray-900">Quick Actions</h2>
-            <p className="text-gray-600 mt-1">Common tasks you can do right now</p>
           </div>
           <div className="p-6">
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
@@ -203,6 +226,21 @@ export default async function AdminDashboard() {
                 </div>
                 <div className="ml-3">
                   <p className="font-medium text-gray-900">Manage Photos</p>
+                  <p className="text-sm text-gray-500">Upload and organize</p>
+                </div>
+              </Link>
+
+              <Link
+                href="/admin/videos"
+                className="flex items-center p-4 border border-gray-200 rounded-lg hover:bg-gray-50 transition-colors group"
+              >
+                <div className="p-2 bg-red-100 rounded-lg group-hover:bg-red-200 transition-colors">
+                  <svg className="w-5 h-5 text-red-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 10l4.553-2.276A1 1 0 0121 8.618v6.764a1 1 0 01-1.447.894L15 14M5 18h8a2 2 0 002-2V8a2 2 0 00-2-2H5a2 2 0 00-2 2v8a2 2 0 002 2z" />
+                  </svg>
+                </div>
+                <div className="ml-3">
+                  <p className="font-medium text-gray-900">Manage Videos</p>
                   <p className="text-sm text-gray-500">Upload and organize</p>
                 </div>
               </Link>

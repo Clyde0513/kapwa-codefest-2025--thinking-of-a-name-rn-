@@ -74,22 +74,22 @@ export default function NewEventPage() {
   return (
     <div className="min-h-screen bg-gray-50">
       {/* Header */}
-      <header className="bg-white shadow-sm border-b">
+      <header className="bg-gradient-to-r from-[#7A0000] to-[#A01010] shadow-sm border-b">
         <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="flex items-center justify-between py-6">
             <div>
-              <nav className="flex items-center space-x-2 text-sm text-gray-500">
-                <Link href="/admin" className="hover:text-gray-700">Admin</Link>
+              <nav className="flex items-center space-x-2 text-sm text-white/80">
+                <Link href="/admin" className="hover:text-white">Admin</Link>
                 <span>›</span>
-                <Link href="/admin/events" className="hover:text-gray-700">Events</Link>
+                <Link href="/admin/events" className="hover:text-white">Events</Link>
                 <span>›</span>
-                <span className="text-gray-900">New Event</span>
+                <span className="text-white">New Event</span>
               </nav>
-              <h1 className="text-2xl font-bold text-gray-900 mt-2">Create New Event</h1>
+              <h1 className="text-2xl font-bold text-white mt-2">Create New Event</h1>
             </div>
             <Link
               href="/admin/events"
-              className="bg-gray-100 hover:bg-gray-200 text-gray-700 px-4 py-2 rounded-lg transition-colors"
+              className="bg-white/10 hover:bg-white/20 text-white px-4 py-2 rounded-lg transition-colors border border-white/20"
             >
               Cancel
             </Link>
@@ -235,19 +235,6 @@ Join us for our monthly community dinner! This is a great opportunity to meet ne
             </div>
           </div>
 
-          {/* Help Section */}
-          <div className="bg-green-50 rounded-lg border border-green-200">
-            <div className="p-6">
-              <h3 className="text-lg font-medium text-green-900 mb-2">📅 Event Planning Tips</h3>
-              <ul className="space-y-2 text-sm text-green-800">
-                <li>• <strong>Be specific with times:</strong> Include start and end times so people can plan</li>
-                <li>• <strong>Include location details:</strong> Mention the building, room, or street address</li>
-                <li>• <strong>Describe the event:</strong> Tell people what will happen and who should attend</li>
-                <li>• <strong>Add contact info:</strong> Include who to contact for questions or registration</li>
-                <li>• <strong>Plan ahead:</strong> Create events well in advance so people can add them to their calendars</li>
-              </ul>
-            </div>
-          </div>
 
           {/* Actions */}
           <div className="flex items-center justify-between">

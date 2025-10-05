@@ -1,50 +1,109 @@
+'use client';
+
 import Link from 'next/link';
-import { db } from '../../../lib/db-utils';
+import { useState, useEffect } from 'react';
+import { useRouter } from 'next/navigation';
 
-export default async function PostsManagementPage() {
-  let posts: any[] = [];
+interface Post {
+  id: string;
+  title: string;
+  content: string;
+  published: boolean;
+  createdAt: string;
+  author?: {
+    name: string;
+    email: string;
+  };
+}
 
-  try {
-    // Get posts from database
-    const result = await db.findManyPosts({
-      take: 50,
-      orderBy: { createdAt: 'desc' },
-      include: {
-        author: {
-          select: { name: true, email: true },
-        },
-      },
-    });
-    posts = result;
-  } catch (error) {
-    console.error('Error fetching posts from database:', error);
+export default function PostsManagementPage() {
+  const [posts, setPosts] = useState<Post[]>([]);
+  const [loading, setLoading] = useState(true);
+  const [deleting, setDeleting] = useState<string | null>(null);
+  const router = useRouter();
+
+  useEffect(() => {
+    fetchPosts();
+  }, []);
+
+  const fetchPosts = async () => {
+    try {
+      const response = await fetch('/api/posts');
+      if (response.ok) {
+        const data = await response.json();
+        setPosts(data.posts || []);
+      }
+    } catch (error) {
+      console.error('Error fetching posts:', error);
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  const handleDelete = async (postId: string, postTitle: string) => {
+    const confirmed = window.confirm(
+      `Are you sure you want to delete "${postTitle}"? This action cannot be undone.`
+    );
+    
+    if (!confirmed) return;
+
+    setDeleting(postId);
+    try {
+      const response = await fetch(`/api/posts/${postId}`, {
+        method: 'DELETE',
+      });
+
+      if (response.ok) {
+        // Refresh the posts list to ensure we have the latest data
+        await fetchPosts();
+      } else {
+        const errorData = await response.json();
+        alert(`Failed to delete post: ${errorData.error || 'Unknown error'}`);
+      }
+    } catch (error) {
+      console.error('Error deleting post:', error);
+      alert('Failed to delete post. Please try again.');
+    } finally {
+      setDeleting(null);
+    }
+  };
+
+  if (loading) {
+    return (
+      <div className="min-h-screen bg-gray-50 flex items-center justify-center">
+        <div className="text-center">
+          <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-blue-600 mx-auto mb-4"></div>
+          <p className="text-gray-600">Loading posts...</p>
+        </div>
+      </div>
+    );
   }
 
   return (
     <div className="min-h-screen bg-gray-50">
       {/* Header */}
-      <header className="bg-white shadow-sm border-b">
+      <header className="bg-gradient-to-r from-[#7A0000] to-[#A01010] shadow-sm border-b">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="flex items-center justify-between py-6">
             <div>
-              <nav className="flex items-center space-x-2 text-sm text-gray-500">
-                <Link href="/admin" className="hover:text-gray-700">Admin</Link>
+              <nav className="flex items-center space-x-2 text-sm text-white/80">
+                <Link href="/admin" className="hover:text-white">Admin</Link>
                 <span>›</span>
-                <span className="text-gray-900">Blog Posts</span>
+                <span className="text-white">Blog Posts</span>
               </nav>
-              <h1 className="text-2xl font-bold text-gray-900 mt-2">Blog Posts</h1>
-              <p className="text-gray-600 mt-1">Manage your church blog posts</p>
+              <h1 className="text-2xl font-bold text-white mt-2">Blog Posts</h1>
+              <p className="text-white/90 mt-1">Manage your church blog posts</p>
             </div>
             <div className="flex space-x-4">
               <Link
                 href="/admin"
-                className="bg-gray-100 hover:bg-gray-200 text-gray-700 px-4 py-2 rounded-lg transition-colors"
+                className="bg-white/10 hover:bg-white/20 text-white px-4 py-2 rounded-lg transition-colors border border-white/20"
               >
                 Back to Admin
               </Link>
               <Link
                 href="/admin/posts/new"
-                className="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-lg transition-colors"
+                className="bg-white text-red-600 hover:bg-gray-100 px-4 py-2 rounded-lg transition-colors font-semibold"
               >
                 Create New Post
               </Link>
@@ -116,7 +175,7 @@ export default async function PostsManagementPage() {
                         <span>{new Date(post.createdAt).toLocaleDateString()}</span>
                       </div>
                     </div>
-                    <div className="flex items-center space-x-2">
+                    <div className="flex items-center space-x-3">
                       <Link
                         href={`/admin/posts/${post.id}/edit`}
                         className="text-blue-600 hover:text-blue-700 text-sm font-medium"
@@ -130,6 +189,13 @@ export default async function PostsManagementPage() {
                       >
                         View
                       </Link>
+                      <button
+                        onClick={() => handleDelete(post.id, post.title)}
+                        disabled={deleting === post.id}
+                        className="text-red-600 hover:text-red-700 disabled:text-red-400 text-sm font-medium"
+                      >
+                        {deleting === post.id ? 'Deleting...' : 'Delete'}
+                      </button>
                     </div>
                   </div>
                 </div>
