@@ -41,7 +41,7 @@ export default function DemoPage() {
               </h3>
               <div className="mt-2 text-sm text-yellow-700">
                 <p>
-                  The admin interface is fully functional, but there's a temporary database connection issue. 
+                  The admin interface is fully functional, but there&apos;s a temporary database connection issue. 
                   This is a common PostgreSQL prepared statement conflict that occurs during development.
                 </p>
               </div>

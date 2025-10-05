@@ -10,7 +10,7 @@ export default async function EventsPage() {
       take: 50,
       orderBy: { startsAt: 'asc' },
       include: {
-        creator: {
+        createdBy: {
           select: { name: true, email: true },
         },
       },
@@ -131,7 +131,7 @@ export default async function EventsPage() {
                         )}
                         <span>•</span>
                         <span>
-                          Created by {event.creator?.name || 'Unknown'}
+                          Created by {event.createdBy?.name || 'Unknown'}
                         </span>
                       </div>
                     </div>
