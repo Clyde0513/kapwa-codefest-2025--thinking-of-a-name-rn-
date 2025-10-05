@@ -27,15 +27,18 @@ export default function NewEventPage() {
           'Content-Type': 'application/json',
         },
         body: JSON.stringify({
-          ...formData,
+          title: formData.title,
+          description: formData.description,
           startsAt: new Date(formData.startsAt).toISOString(),
           endsAt: new Date(formData.endsAt).toISOString(),
+          location: formData.location,
+          allDay: formData.allDay,
         }),
       });
 
       if (response.ok) {
         const result = await response.json();
-        router.push(`/admin/events/${result.event.id}/edit`);
+        router.push(`/admin/events`);
       } else {
         alert('Failed to create event. Please try again.');
       }

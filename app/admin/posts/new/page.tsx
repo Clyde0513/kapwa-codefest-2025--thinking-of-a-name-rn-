@@ -29,9 +29,11 @@ export default function NewPostPage() {
 
       if (response.ok) {
         const result = await response.json();
-        router.push(`/admin/posts/${result.post.id}/edit`);
+        router.push(`/admin/posts`);
       } else {
-        alert('Failed to create post. Please try again.');
+        const errorData = await response.json();
+        const errorMessage = errorData.details || errorData.error || 'Failed to create post. Please try again.';
+        alert(`Error: ${errorMessage}`);
       }
     } catch (error) {
       console.error('Error creating post:', error);

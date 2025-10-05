@@ -37,11 +37,21 @@ export default function WebsiteSettingsPage() {
     setLoading(true);
 
     try {
-      // TODO: Save to database or CMS
-      await new Promise(resolve => setTimeout(resolve, 1000)); // Simulate API call
-      
-      setSaved(true);
-      setTimeout(() => setSaved(false), 3000);
+      const response = await fetch('/api/settings', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(settings),
+      });
+
+      if (response.ok) {
+        setSaved(true);
+        setTimeout(() => setSaved(false), 3000);
+      } else {
+        const errorData = await response.json();
+        alert(`Failed to save settings: ${errorData.error || 'Unknown error'}`);
+      }
     } catch (error) {
       console.error('Error saving settings:', error);
       alert('Failed to save settings. Please try again.');
@@ -57,6 +67,22 @@ export default function WebsiteSettingsPage() {
       [name]: value
     }));
   };
+
+  // Load settings on component mount
+  useEffect(() => {
+    const loadSettings = async () => {
+      try {
+        const response = await fetch('/api/settings');
+        if (response.ok) {
+          const data = await response.json();
+          setSettings(data.settings);
+        }
+      } catch (error) {
+        console.error('Error loading settings:', error);
+      }
+    };
+    loadSettings();
+  }, []);
 
   return (
     <div className="min-h-screen bg-gray-50">

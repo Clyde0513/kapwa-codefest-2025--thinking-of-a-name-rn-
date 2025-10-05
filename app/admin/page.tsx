@@ -62,9 +62,18 @@ export default async function AdminDashboard() {
               >
                 View Website
               </Link>
-              <button className="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-lg transition-colors">
+              <Link
+                href="/admin/demo"
+                className="bg-yellow-600 hover:bg-yellow-700 text-white px-4 py-2 rounded-lg transition-colors"
+              >
+                Demo Mode
+              </Link>
+              <Link
+                href="/admin/help"
+                className="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-lg transition-colors"
+              >
                 Help & Support
-              </button>
+              </Link>
             </div>
           </div>
         </div>

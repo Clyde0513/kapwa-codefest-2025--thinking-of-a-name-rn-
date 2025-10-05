@@ -1,5 +1,5 @@
 import { NextRequest, NextResponse } from 'next/server';
-import { prisma } from '../../../lib/prisma';
+import { db } from '../../../lib/db-utils';
 import { z } from 'zod';
 
 const postSchema = z.object({
@@ -14,7 +14,7 @@ export async function POST(req: NextRequest) {
     const body = await req.json();
     const validatedData = postSchema.parse(body);
 
-    const post = await prisma.post.create({
+    const post = await db.createPost({
       data: {
         title: validatedData.title,
         content: validatedData.content,
@@ -43,8 +43,22 @@ export async function POST(req: NextRequest) {
       );
     }
 
+    // Handle database connection issues gracefully
+    if (error && typeof error === 'object' && 'message' in error) {
+      const errorMessage = (error as Error).message;
+      if (errorMessage.includes('prepared statement') || errorMessage.includes('connection')) {
+        return NextResponse.json(
+          { 
+            error: 'Database temporarily unavailable. Please try again in a moment.',
+            details: 'The database connection is experiencing issues. Your post will be saved once the connection is restored.'
+          },
+          { status: 503 }
+        );
+      }
+    }
+
     return NextResponse.json(
-      { error: 'Failed to create post' },
+      { error: 'Failed to create post', details: 'Please check your input and try again.' },
       { status: 500 }
     );
   }
