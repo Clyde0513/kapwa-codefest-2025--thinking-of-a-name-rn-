@@ -34,7 +34,7 @@ export default async function AdminDashboard() {
     eventsCount = eventsResult as number;
     photosCount = photosResult as number;
 
-    upcomingEvents = await db.findManyEvents({
+    const upcomingEvents = await db.findManyEvents({
       take: 5,
       where: {
         startsAt: {

@@ -32,14 +32,23 @@ export default function EventsCalendar() {
 
       if (response.ok) {
         const data = await response.json();
-        const calendarEvents: CalendarEvent[] = data.map((event: any) => ({
-          id: event.id,
-          title: event.title,
-          start: event.startsAt,
-          end: event.endsAt,
-          allDay: event.allDay,
-        }));
-        setEvents(calendarEvents);
+
+        // Accept either an array response or an object with `events` array
+        const eventsArray = Array.isArray(data) ? data : data?.events;
+
+        if (!Array.isArray(eventsArray)) {
+          console.warn('Unexpected events response; expected array but got:', data);
+          setEvents([]);
+        } else {
+          const calendarEvents: CalendarEvent[] = eventsArray.map((event: any) => ({
+            id: String(event.id),
+            title: event.title ?? 'Untitled Event',
+            start: event.startsAt ?? event.start ?? event.starts_at ?? '',
+            end: event.endsAt ?? event.end ?? event.ends_at ?? '',
+            allDay: Boolean(event.allDay),
+          }));
+          setEvents(calendarEvents);
+        }
       }
     } catch (error) {
       console.error('Error fetching events:', error);

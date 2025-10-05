@@ -36,6 +36,7 @@
     "@sanity/image-url": "^1.2.0",
     "@sanity/vision": "^4.10.2",
     "cloudinary": "^2.7.0",
+    "date-fns": "^4.1.0",
     "fullcalendar": "^6.1.19",
     "next": "^15.5.4",
     "next-sanity": "^11.4.2",
