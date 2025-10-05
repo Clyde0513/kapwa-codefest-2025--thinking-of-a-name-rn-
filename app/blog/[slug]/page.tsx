@@ -1,5 +1,5 @@
-import Image from 'next/image';
-import { prisma } from '../../../lib/prisma';
+import { sanityClient } from '../../../lib/sanityClient';
+import { PortableText } from '@portabletext/react';
 
 interface Props {
   params: Promise<{ slug: string }>;
@@ -13,17 +13,19 @@ export default async function PostPage({ params }: Props) {
   let post: any = null;
   
   try {
-    // Try to fetch by ID first (if slug is a UUID)
-    if (slug.match(/^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i)) {
-      post = await prisma.post.findUnique({
-        where: { id: slug },
-        include: {
-          author: {
-            select: { name: true, email: true },
-          },
-        },
-      });
-    }
+    // Fetch post from Sanity by slug
+    post = await sanityClient.fetch(`
+      *[_type == "post" && slug.current == $slug][0] {
+        _id,
+        title,
+        slug,
+        publishedAt,
+        excerpt,
+        body,
+        "author": author->name,
+        "mainImage": mainImage.asset->url
+      }
+    `, { slug });
   } catch (error) {
     console.error('Error fetching post:', error);
   }
@@ -35,6 +37,12 @@ export default async function PostPage({ params }: Props) {
           <div className="text-center">
             <h1 className="text-4xl font-poppins mb-4">Post not found</h1>
             <p className="text-gray-600">The post you're looking for doesn't exist or has been removed.</p>
+            <a 
+              href="/blog" 
+              className="inline-block mt-4 bg-blue-600 text-white px-6 py-2 rounded-lg hover:bg-blue-700"
+            >
+              Back to Blog
+            </a>
           </div>
         </div>
       </div>
@@ -45,23 +53,37 @@ export default async function PostPage({ params }: Props) {
     <main className="min-h-screen bg-white">
       <div className="max-w-3xl mx-auto py-12 px-4">
         <article className="prose prose-lg max-w-none">
+          {post.mainImage && (
+            <div className="mb-8">
+              <img
+                src={post.mainImage}
+                alt={post.title}
+                className="w-full h-64 object-cover rounded-lg"
+              />
+            </div>
+          )}
+          
           <h1 className="text-4xl font-poppins mb-4">{post.title}</h1>
           <div className="flex items-center space-x-4 text-sm text-gray-600 mb-6">
-            <span>{new Date(post.createdAt).toLocaleDateString()}</span>
+            <time dateTime={post.publishedAt}>
+              {new Date(post.publishedAt).toLocaleDateString()}
+            </time>
             <span>•</span>
-            <span>By {post.author?.name || 'Church Admin'}</span>
+            <span>By {post.author || 'Church Staff'}</span>
           </div>
           
+          {post.excerpt && (
+            <div className="text-lg text-gray-700 italic mb-8 p-4 bg-gray-50 rounded-lg">
+              {post.excerpt}
+            </div>
+          )}
+          
           <div className="prose prose-lg max-w-none">
-            {post.content.split('\n').map((paragraph: string, index: number) => (
-              paragraph.trim() ? (
-                <p key={index} className="mb-4">
-                  {paragraph}
-                </p>
-              ) : (
-                <br key={index} />
-              )
-            ))}
+            {post.body && post.body.length > 0 ? (
+              <PortableText value={post.body} />
+            ) : (
+              <p className="text-gray-600">Content is being loaded...</p>
+            )}
           </div>
         </article>
       </div>

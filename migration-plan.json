@@ -1,0 +1,124 @@
+{
+  "timestamp": "2025-10-05T04:12:33.959Z",
+  "totalPosts": 10,
+  "posts": [
+    {
+      "originalId": "c276a750-db51-4341-98ba-284b0514adc0",
+      "title": "Hello, world",
+      "slug": "hello-world",
+      "publishedAt": "2025-10-05T01:24:22.000Z",
+      "excerpt": "First post! 🎉",
+      "tags": [
+        "general"
+      ],
+      "author": "Demo User"
+    },
+    {
+      "originalId": "d52e43d9-c98c-413e-b7e8-56a77542d632",
+      "title": "Smoke test post",
+      "slug": "smoke-test-post",
+      "publishedAt": "2025-10-05T01:55:48.757Z",
+      "excerpt": "If you can read this, DB works.",
+      "tags": [
+        "general"
+      ],
+      "author": "Demo User"
+    },
+    {
+      "originalId": "f484c24e-0d33-4451-94c7-43fcd5a92014",
+      "title": "Smoke Post",
+      "slug": "smoke-post",
+      "publishedAt": "2025-10-05T02:02:08.626Z",
+      "excerpt": "🔥 If you read me, DB is alive.",
+      "tags": [
+        "general"
+      ],
+      "author": "Smoke Bot"
+    },
+    {
+      "originalId": "4c50ec59-84ba-4640-a36f-740db58bea1d",
+      "title": "Smoke Post",
+      "slug": "smoke-post",
+      "publishedAt": "2025-10-05T02:06:08.788Z",
+      "excerpt": "🔥 If you read me, DB is alive.",
+      "tags": [
+        "general"
+      ],
+      "author": "Smoke Bot"
+    },
+    {
+      "originalId": "6a6e140a-803c-4c17-a772-31767eb024f4",
+      "title": "THIS IS A TEST POST YAYYYY",
+      "slug": "this-is-a-test-post-yayyyy",
+      "publishedAt": "2025-10-05T03:29:50.959Z",
+      "excerpt": "beep boop goop ",
+      "tags": [
+        "general"
+      ],
+      "author": "Unknown"
+    },
+    {
+      "originalId": "a94cc8cf-6e82-4f08-8707-2f6fd2782ae8",
+      "title": "klangkejangea",
+      "slug": "klangkejangea",
+      "publishedAt": "2025-10-05T03:30:19.199Z",
+      "excerpt": "eahgajhglaej",
+      "tags": [
+        "general"
+      ],
+      "author": "Unknown"
+    },
+    {
+      "originalId": "524163b5-a7a9-4478-acc3-f7af4d5f8828",
+      "title": "Test Post from Admin",
+      "slug": "test-post-from-admin",
+      "publishedAt": "2025-10-05T03:35:47.792Z",
+      "excerpt": "This is a test post created through the admin interface. It should appear on the homepage!",
+      "tags": [
+        "general"
+      ],
+      "author": "Unknown"
+    },
+    {
+      "originalId": "34cd4949-e6f8-471a-8006-a5e0ff83ae72",
+      "title": "Welcome to Our Church",
+      "slug": "welcome-to-our-church",
+      "publishedAt": "2025-10-05T03:43:43.715Z",
+      "excerpt": "We are excited to welcome you to our church community! This post was created through our new admin interface.",
+      "tags": [
+        "church",
+        "community"
+      ],
+      "author": "Unknown"
+    },
+    {
+      "originalId": "7f23df51-d04d-45f6-8dfa-ad7b5526c81f",
+      "title": "Robust Database Test",
+      "slug": "robust-database-test",
+      "publishedAt": "2025-10-05T03:48:05.735Z",
+      "excerpt": "This post tests the improved database connection with retry logic.",
+      "tags": [
+        "general"
+      ],
+      "author": "Unknown"
+    },
+    {
+      "originalId": "43d457d1-bbfd-4eb1-b4e0-ee72882e8a1a",
+      "title": "WEEEEEE",
+      "slug": "weeeeee",
+      "publishedAt": "2025-10-05T03:54:04.331Z",
+      "excerpt": "WOOOOOO",
+      "tags": [
+        "general"
+      ],
+      "author": "Unknown"
+    }
+  ],
+  "nextSteps": [
+    "Set up a Sanity project at https://sanity.io",
+    "Configure environment variables in .env.local",
+    "Run the actual migration script",
+    "Update blog pages to use Sanity",
+    "Test the integration"
+  ]
+}

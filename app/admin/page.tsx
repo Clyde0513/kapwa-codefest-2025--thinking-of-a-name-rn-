@@ -1,32 +1,40 @@
 import Link from 'next/link';
-import { prisma } from '../../lib/prisma';
+import { db } from '../../lib/db-utils';
+import { sanityClient } from '../../lib/sanityClient';
 
 export default async function AdminDashboard() {
   // Get quick stats for dashboard with error handling
-  let postsCount = 0;
+  let blogPostsCount = 0;
   let eventsCount = 0;
   let photosCount = 0;
-  let recentPosts: any[] = [];
+  let recentBlogPosts: any[] = [];
   let upcomingEvents: any[] = [];
 
   try {
-    [postsCount, eventsCount, photosCount] = await Promise.all([
-      prisma.post.count().catch(() => 0),
-      prisma.event.count().catch(() => 0),
-      prisma.photo.count().catch(() => 0),
+    // Get Sanity blog posts
+    const sanityPosts = await sanityClient.fetch(`
+      *[_type == "post"] | order(publishedAt desc) {
+        _id,
+        title,
+        slug,
+        publishedAt,
+        excerpt,
+        "authorName": author->name
+      }
+    `).catch(() => []);
+    
+    blogPostsCount = sanityPosts.length;
+    recentBlogPosts = sanityPosts.slice(0, 5);
+
+    // Get database stats
+    const [eventsResult, photosResult] = await Promise.all([
+      db.countEvents({}).catch(() => 0),
+      db.countPhotos({}).catch(() => 0),
     ]);
+    eventsCount = eventsResult as number;
+    photosCount = photosResult as number;
 
-    recentPosts = await prisma.post.findMany({
-      take: 5,
-      orderBy: { createdAt: 'desc' },
-      include: {
-        author: {
-          select: { name: true, email: true },
-        },
-      },
-    }).catch(() => []);
-
-    upcomingEvents = await prisma.event.findMany({
+    upcomingEvents = await db.findManyEvents({
       take: 5,
       where: {
         startsAt: {
@@ -49,9 +57,9 @@ export default async function AdminDashboard() {
             <div>
               <h1 className="text-3xl font-bold text-gray-900">Church Admin</h1>
               <p className="text-gray-600 mt-1">Manage your church&apos;s website content</p>
-              {postsCount === 0 && eventsCount === 0 && photosCount === 0 && (
+              {blogPostsCount === 0 && eventsCount === 0 && photosCount === 0 && (
                 <div className="mt-2 px-3 py-1 bg-yellow-100 text-yellow-800 text-sm rounded-lg inline-block">
-                  Database connection issue - showing demo data
+                  No content found - create your first blog post or event
                 </div>
               )}
             </div>
@@ -90,8 +98,8 @@ export default async function AdminDashboard() {
                 </svg>
               </div>
               <div className="ml-4">
-                <p className="text-sm font-medium text-gray-600">Total Posts</p>
-                <p className="text-2xl font-bold text-gray-900">{postsCount}</p>
+                <p className="text-sm font-medium text-gray-600">Blog Posts</p>
+                <p className="text-2xl font-bold text-gray-900">{blogPostsCount}</p>
               </div>
             </div>
           </div>
@@ -134,7 +142,8 @@ export default async function AdminDashboard() {
           <div className="p-6">
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
               <Link
-                href="/admin/posts/new"
+                href="https://b4h3ckxo.sanity.studio/"
+                target="_blank"
                 className="flex items-center p-4 border border-gray-200 rounded-lg hover:bg-gray-50 transition-colors group"
               >
                 <div className="p-2 bg-blue-100 rounded-lg group-hover:bg-blue-200 transition-colors">
@@ -143,8 +152,23 @@ export default async function AdminDashboard() {
                   </svg>
                 </div>
                 <div className="ml-3">
-                  <p className="font-medium text-gray-900">New Post</p>
-                  <p className="text-sm text-gray-500">Share news or updates</p>
+                  <p className="font-medium text-gray-900">New Blog Post</p>
+                  <p className="text-sm text-gray-500">Create rich content with images</p>
+                </div>
+              </Link>
+
+              <Link
+                href="/admin/blog"
+                className="flex items-center p-4 border border-gray-200 rounded-lg hover:bg-gray-50 transition-colors group"
+              >
+                <div className="p-2 bg-purple-100 rounded-lg group-hover:bg-purple-200 transition-colors">
+                  <svg className="w-5 h-5 text-purple-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
+                  </svg>
+                </div>
+                <div className="ml-3">
+                  <p className="font-medium text-gray-900">Manage Blog</p>
+                  <p className="text-sm text-gray-500">View and edit blog posts</p>
                 </div>
               </Link>
 
@@ -199,43 +223,57 @@ export default async function AdminDashboard() {
 
         {/* Recent Activity */}
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
-          {/* Recent Posts */}
+          {/* Recent Blog Posts */}
           <div className="bg-white rounded-lg shadow-sm border">
             <div className="p-6 border-b">
               <div className="flex items-center justify-between">
-                <h3 className="text-lg font-semibold text-gray-900">Recent Posts</h3>
-                <Link href="/admin/posts" className="text-blue-600 hover:text-blue-700 text-sm font-medium">
-                  View All
+                <h3 className="text-lg font-semibold text-gray-900">Recent Blog Posts</h3>
+                <Link href="/admin/blog" className="text-blue-600 hover:text-blue-700 text-sm font-medium">
+                  Manage All
                 </Link>
               </div>
             </div>
             <div className="p-6">
               <div className="space-y-4">
-                {recentPosts.map((post) => (
-                  <div key={post.id} className="flex items-center space-x-3">
-                    <div className="flex-shrink-0">
-                      <div className="w-10 h-10 bg-gray-100 rounded-lg flex items-center justify-center">
-                        <svg className="w-5 h-5 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
-                        </svg>
+                {recentBlogPosts.length === 0 ? (
+                  <div className="text-center py-4">
+                    <p className="text-gray-500 text-sm mb-2">No blog posts found</p>
+                    <Link 
+                      href="/studio" 
+                      target="_blank"
+                      className="text-blue-600 hover:text-blue-700 text-sm font-medium"
+                    >
+                      Create your first blog post →
+                    </Link>
+                  </div>
+                ) : (
+                  recentBlogPosts.map((post) => (
+                    <div key={post._id} className="flex items-center space-x-3">
+                      <div className="flex-shrink-0">
+                        <div className="w-10 h-10 bg-purple-100 rounded-lg flex items-center justify-center">
+                          <svg className="w-5 h-5 text-purple-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
+                          </svg>
+                        </div>
                       </div>
-                    </div>
-                    <div className="flex-1 min-w-0">
-                      <p className="text-sm font-medium text-gray-900 truncate">{post.title}</p>
-                      <p className="text-sm text-gray-500">
-                        by {post.author?.name || 'Unknown'} • {new Date(post.createdAt).toLocaleDateString()}
-                      </p>
-                    </div>
-                    <div className="flex-shrink-0">
+                      <div className="flex-1 min-w-0">
+                        <p className="text-sm font-medium text-gray-900 truncate">{post.title}</p>
+                        <p className="text-sm text-gray-500">
+                          by {post.authorName || 'Church Staff'} • {post.publishedAt ? new Date(post.publishedAt).toLocaleDateString() : 'Draft'}
+                        </p>
+                      </div>
+                      <div className="flex-shrink-0">
                       <Link
-                        href={`/admin/posts/${post.id}/edit`}
+                        href={`https://b4h3ckxo.sanity.studio/desk/post;${post._id}`}
+                        target="_blank"
                         className="text-blue-600 hover:text-blue-700 text-sm font-medium"
                       >
                         Edit
                       </Link>
+                      </div>
                     </div>
-                  </div>
-                ))}
+                  ))
+                )}
               </div>
             </div>
           </div>
