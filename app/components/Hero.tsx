@@ -40,7 +40,7 @@ export default function Hero() {
             href="#events"
             className="bg-red-600 hover:bg-red-700 text-white font-bold px-12 py-4 rounded-full transition-all text-xl font-poppins w-full sm:w-auto border-4 border-white shadow-lg"
           >
-            Events Calendar
+            Events
           </Link>
           <Link
             href="#mass"
