@@ -113,3 +113,32 @@ See the [LICENSE](LICENSE) file for details.
 Special thanks to Ricky and Manny for their warmth, involvement, and dedication to their faith community.
 
 Original site: https://filipinoapostolate.blogspot.com/
+
+---
+
+## Sanity blog example
+
+This repo includes a small Sanity schema example in `sanity/schemas` and Next.js demo pages under `app/blog`.
+
+Setup steps:
+
+1. Install `next-sanity` in your Next.js project:
+
+	npm install next-sanity
+
+2. Create a Sanity project (https://www.sanity.io) and its Studio.
+3. Copy the files from `sanity/schemas/` into your Studio's `schemas/` directory and deploy the studio.
+4. Set environment variables in `.env.local` in this project:
+
+	NEXT_PUBLIC_SANITY_PROJECT_ID=yourProjectId
+	NEXT_PUBLIC_SANITY_DATASET=production
+	# optional if you need draft/preview reads:
+	SANITY_API_TOKEN=yourToken
+
+5. Start the dev server:
+
+	npm run dev
+
+6. Visit `/blog` to see the list of posts once you have published posts in Sanity Studio.
+
+The Next.js demo uses GROQ queries and `next-sanity` for fetching content. The demo pages are server components using ISR (`revalidate`) so published posts appear shortly after you publish.

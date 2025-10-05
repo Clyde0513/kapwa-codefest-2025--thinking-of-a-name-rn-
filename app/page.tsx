@@ -3,12 +3,19 @@ import Hero from './components/Hero';
 import Events from './components/Events';
 import MassSchedule from './components/MassSchedule';
 import Leadership from './components/Leadership';
+import BlogList from './components/BlogList';
 
 export default function Home() {
   return (
     <main className="min-h-screen bg-white">
       <Header />
       <Hero />
+       {/* Embedded blog preview: latest 3 posts */}
+      <section className="max-w-4xl mx-auto py-12 px-4">
+            <h2 className="text-3xl font-poppins mb-6">Latest News</h2>
+      {/* BlogList is a server component that fetches posts */}
+      <BlogList limit={3} />
+      </section>
       <Events />
       <MassSchedule />
       <Leadership />
