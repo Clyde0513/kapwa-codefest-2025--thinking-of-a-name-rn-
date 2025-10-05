@@ -12,7 +12,7 @@ export async function DELETE(
     // Get media record
     const media = await prisma.photo.findUnique({
       where: { id },
-      select: { id: true, publicId: true, postId: true, mediaType: true },
+      select: { id: true, publicId: true, postId: true, format: true },
     });
 
     if (!media) {
@@ -25,7 +25,7 @@ export async function DELETE(
     // TODO: Call Cloudinary API to delete the resource
     // This would require server-side Cloudinary SDK
     // const cloudinary = require('cloudinary').v2;
-    // await cloudinary.uploader.destroy(media.publicId, { resource_type: media.mediaType === 'video' ? 'video' : 'image' });
+    // await cloudinary.uploader.destroy(media.publicId, { resource_type: 'image' });
 
     // For now, just delete from database
     // In production, you might want to soft delete instead
@@ -33,7 +33,7 @@ export async function DELETE(
       where: { id },
     });
 
-    console.log('Media deleted:', media.publicId, media.mediaType);
+    console.log('Media deleted:', media.publicId, media.format);
 
     return NextResponse.json({ 
       ok: true, 

@@ -9,10 +9,12 @@ import Galleries from './components/Galleries';
 import Resources from './components/Resources';
 import Footer from './components/Footer';
 import EventsCalendar from './components/EventsCalendar';
+import SmoothScrollHandler from './components/SmoothScrollHandler';
 
 export default function Home() {
   return (
-    <main className="min-h-screen bg-white">
+    <main className="min-h-screen bg-white scroll-pt-20">
+      <SmoothScrollHandler />
       <Header />
       <Hero />
        {/* Embedded blog preview: latest 3 posts */}

@@ -84,13 +84,13 @@ export default function Hero() {
         {/* CTA Buttons */}
         <div className="flex flex-col sm:flex-row gap-5 justify-center items-center mb-6 animate-fade-in-up opacity-0" style={{animationDelay: '0.6s', animationFillMode: 'forwards'}}>
           <Link
-            href="#events"
+            href="/#events"
             className="bg-red-600 hover:bg-red-700 text-white font-bold px-12 py-4 rounded-full transition-all text-xl font-poppins w-full sm:w-auto border-4 border-white shadow-lg"
           >
             Events
           </Link>
           <Link
-            href="#mass"
+            href="/#mass"
             className="bg-white hover:bg-gray-100 text-blue-600 font-bold px-12 py-4 rounded-full transition-all text-xl font-poppins w-full sm:w-auto border-4 border-white shadow-lg"
           >
             Mass Schedule
@@ -100,7 +100,7 @@ export default function Hero() {
         {/* Leadership Button */}
         <div className="mt-6 animate-fade-in-up opacity-0" style={{animationDelay: '0.8s', animationFillMode: 'forwards'}}>
           <Link
-            href="#leadership"
+            href="/#leadership"
             className="inline-block bg-yellow-400 hover:bg-yellow-500 text-gray-900 font-bold px-16 py-4 rounded-full transition-all text-xl font-poppins border-4 border-white shadow-lg"
           >
             Leadership

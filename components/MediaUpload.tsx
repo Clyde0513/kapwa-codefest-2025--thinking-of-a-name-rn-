@@ -1,7 +1,7 @@
 'use client';
 
 import { useState, useRef } from 'react';
-import { uploadToCloudinary, saveMediaToDatabase } from '../lib/cloudinary';
+import { uploadToCloudinary, savePhotoToDatabase, saveVideoToDatabase } from '../lib/cloudinary';
 
 interface MediaUploadProps {
   postId?: string;
@@ -63,12 +63,19 @@ export default function MediaUpload({
       
       // Step 2: Save to database
       setProgress(75);
-      const dbResult = await saveMediaToDatabase({
-        ...cloudinaryResult,
-        caption: file.name,
-        postId,
-        uploaderId,
-      });
+      const dbResult = isImage 
+        ? await savePhotoToDatabase({
+            ...cloudinaryResult,
+            caption: file.name,
+            postId,
+            uploaderId,
+          })
+        : await saveVideoToDatabase({
+            ...cloudinaryResult,
+            caption: file.name,
+            postId,
+            uploaderId,
+          });
 
       setProgress(100);
       

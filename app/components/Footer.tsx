@@ -69,41 +69,41 @@ export default function Footer() {
           <div className="text-center md:text-left">
             <h4 className="font-poppins font-bold text-lg mb-4">Quick Links</h4>
             <nav className="space-y-2">
-              <a 
-                href="#events" 
+              <Link 
+                href="/#events" 
                 onClick={(e) => handleNavClick(e, 'events')}
                 className="block hover:text-gray-300 transition-colors cursor-pointer"
               >
                 Events
-              </a>
-              <a 
-                href="#mass" 
+              </Link>
+              <Link 
+                href="/#mass" 
                 onClick={(e) => handleNavClick(e, 'mass')}
                 className="block hover:text-gray-300 transition-colors cursor-pointer"
               >
                 Mass Schedule
-              </a>
-              <a 
-                href="#leadership" 
+              </Link>
+              <Link 
+                href="/#leadership" 
                 onClick={(e) => handleNavClick(e, 'leadership')}
                 className="block hover:text-gray-300 transition-colors cursor-pointer"
               >
                 Leadership
-              </a>
-              <a 
-                href="#galleries" 
+              </Link>
+              <Link 
+                href="/#galleries" 
                 onClick={(e) => handleNavClick(e, 'galleries')}
                 className="block hover:text-gray-300 transition-colors cursor-pointer"
               >
                 Galleries
-              </a>
-              <a 
-                href="#resources" 
+              </Link>
+              <Link 
+                href="/#resources" 
                 onClick={(e) => handleNavClick(e, 'resources')}
                 className="block hover:text-gray-300 transition-colors cursor-pointer"
               >
                 Resources
-              </a>
+              </Link>
             </nav>
           </div>
 
