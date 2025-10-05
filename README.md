@@ -64,7 +64,7 @@ Create a `.env` file in the root directory:
 DATABASE_URL="postgresql://..."
 DIRECT_URL="postgresql://..."
 
-# Sanity CMS
+# Sanity CMS (no longer being used)
 NEXT_PUBLIC_SANITY_PROJECT_ID="your-project-id"
 NEXT_PUBLIC_SANITY_DATASET="production"
 SANITY_API_TOKEN="your-api-token"
