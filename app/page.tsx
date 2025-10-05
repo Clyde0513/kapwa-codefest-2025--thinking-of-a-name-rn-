@@ -1,3 +1,4 @@
+import Link from 'next/link';
 import Header from './components/Header';
 import Hero from './components/Hero';
 import Events from './components/Events';
@@ -19,9 +20,9 @@ export default function Home() {
       {/* BlogList is a server component that fetches posts */}
       <BlogList limit={3} />
       <div className="flex justify-center mt-8">
-        <a href="/blog" className="bg-red-600 hover:bg-red-700 text-white font-bold px-12 py-4 rounded-full transition-all text-xl font-poppins border-4 border-white shadow-lg">
+        <Link href="/blog" className="bg-red-600 hover:bg-red-700 text-white font-bold px-12 py-4 rounded-full transition-all text-xl font-poppins border-4 border-white shadow-lg">
           View all posts
-        </a>
+        </Link>
       </div>
       </section>
       <Events />
