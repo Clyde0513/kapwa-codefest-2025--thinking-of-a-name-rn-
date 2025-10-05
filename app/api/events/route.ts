@@ -9,7 +9,7 @@ const eventSchema = z.object({
   endsAt: z.string().datetime('Invalid end date'),
   location: z.string().max(500, 'Location must be less than 500 characters').optional(),
   allDay: z.boolean().default(false),
-  creatorId: z.string().uuid().optional(),
+  createdById: z.string().uuid().optional(),
 });
 
 export async function POST(req: NextRequest) {
@@ -25,10 +25,10 @@ export async function POST(req: NextRequest) {
         endsAt: new Date(validatedData.endsAt),
         location: validatedData.location || null,
         allDay: validatedData.allDay,
-        creatorId: validatedData.creatorId || null,
+        createdById: validatedData.createdById || null,
       },
       include: {
-        creator: {
+        createdBy: {
           select: {
             id: true,
             name: true,
@@ -77,7 +77,7 @@ export async function GET(req: NextRequest) {
       skip: offset,
       orderBy: { startsAt: 'asc' },
       include: {
-        creator: {
+        createdBy: {
           select: {
             id: true,
             name: true,

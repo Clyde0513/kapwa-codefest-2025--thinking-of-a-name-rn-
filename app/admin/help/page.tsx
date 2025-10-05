@@ -76,11 +76,11 @@ export default function HelpPage() {
                     <h3 className="font-medium text-gray-900 mb-2">Creating a Post</h3>
                     <p className="text-sm text-gray-600 mb-3">Share news and updates with your congregation</p>
                     <ol className="text-sm text-gray-700 space-y-1">
-                      <li>1. Click "New Post" on the admin dashboard</li>
+                      <li>1. Click &quot;New Post&quot; on the admin dashboard</li>
                       <li>2. Write a clear, descriptive title</li>
                       <li>3. Add your content in simple, clear language</li>
                       <li>4. Upload a photo if you have one</li>
-                      <li>5. Click "Create Post" to publish</li>
+                      <li>5. Click &quot;Create Post&quot; to publish</li>
                     </ol>
                   </div>
 
@@ -88,7 +88,7 @@ export default function HelpPage() {
                     <h3 className="font-medium text-gray-900 mb-2">Adding an Event</h3>
                     <p className="text-sm text-gray-600 mb-3">Create events that appear on your website calendar</p>
                     <ol className="text-sm text-gray-700 space-y-1">
-                      <li>1. Go to "New Event" from the dashboard</li>
+                      <li>1. Go to &quot;New Event&quot; from the dashboard</li>
                       <li>2. Enter the event title and description</li>
                       <li>3. Set the date and time</li>
                       <li>4. Add the location</li>
@@ -102,7 +102,7 @@ export default function HelpPage() {
                     <h3 className="font-medium text-gray-900 mb-2">Uploading Photos</h3>
                     <p className="text-sm text-gray-600 mb-3">Add images to make your content more engaging</p>
                     <ol className="text-sm text-gray-700 space-y-1">
-                      <li>1. Click "Choose File" in the photo upload area</li>
+                      <li>1. Click &quot;Choose File&quot; in the photo upload area</li>
                       <li>2. Select a photo from your computer</li>
                       <li>3. Wait for the upload to complete</li>
                       <li>4. The photo will be automatically optimized</li>
@@ -114,7 +114,7 @@ export default function HelpPage() {
                     <h3 className="font-medium text-gray-900 mb-2">Updating Website Info</h3>
                     <p className="text-sm text-gray-600 mb-3">Keep your church information current</p>
                     <ol className="text-sm text-gray-700 space-y-1">
-                      <li>1. Go to "Website Settings"</li>
+                      <li>1. Go to &quot;Website Settings&quot;</li>
                       <li>2. Update contact information</li>
                       <li>3. Change service times if needed</li>
                       <li>4. Update your mission statement</li>
@@ -198,7 +198,7 @@ export default function HelpPage() {
             <div className="p-6">
               <div className="space-y-6">
                 <div>
-                  <h3 className="font-medium text-gray-900 mb-2">Photo won't upload?</h3>
+                  <h3 className="font-medium text-gray-900 mb-2">Photo won&apos;t upload?</h3>
                   <ul className="text-sm text-gray-700 space-y-1">
                     <li>• Make sure the photo is less than 10MB in size</li>
                     <li>• Try using JPG or PNG format</li>
@@ -213,12 +213,12 @@ export default function HelpPage() {
                     <li>• Make sure you clicked &quot;Save&quot; after making changes</li>
                     <li>• Wait a few minutes for changes to appear</li>
                     <li>• Try refreshing your website page</li>
-                    <li>• Check if you're looking at the right page</li>
+                    <li>• Check if you&apos;re looking at the right page</li>
                   </ul>
                 </div>
 
                 <div>
-                  <h3 className="font-medium text-gray-900 mb-2">Can't find a post or event?</h3>
+                  <h3 className="font-medium text-gray-900 mb-2">Can&apos;t find a post or event?</h3>
                   <ul className="text-sm text-gray-700 space-y-1">
                     <li>• Check if it was saved as a draft</li>
                     <li>• Look in the &quot;Recent Posts&quot; or &quot;Upcoming Events&quot; sections</li>
