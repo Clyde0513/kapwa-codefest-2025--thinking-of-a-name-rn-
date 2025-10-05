@@ -8,7 +8,8 @@
     "build": "next build",
     "start": "next start",
     "lint": "next lint",
-    "db:seed": "prisma db seed"
+    "db:seed": "prisma db seed",
+    "smoke": "node --env-file=.env scripts/smoke.mjs"
   },
   "repository": {
     "type": "git",
