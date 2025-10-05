@@ -28,6 +28,8 @@ model User {
   posts     Post[]
   comments  Comment[]
   events    Event[]  @relation("EventCreator")
+  likes     Like[]
+  photos    Photo[]
 }
 
 model Post {
@@ -45,6 +47,8 @@ model Post {
   updatedAt   DateTime  @updatedAt
 
   comments    Comment[]
+  likes       Like[]
+  photos      Photo[]
 
   @@index([authorId])
   @@index([createdAt])
@@ -64,6 +68,7 @@ model Comment {
   // self-relation for nesting
   parent     Comment?  @relation("CommentToReplies", fields: [parentId], references: [id])
   replies    Comment[] @relation("CommentToReplies")
+  likes      Like[]
 
   @@index([postId, createdAt])
   @@index([parentId])
@@ -91,3 +96,45 @@ model Event {
   @@index([startsAt])
   @@index([createdById])
 }
+
+model Like {
+  id         String   @id @default(uuid())
+  userId     String
+  user       User     @relation(fields: [userId], references: [id])
+
+  // polymorphic: like a post OR a comment
+  postId     String?
+  post       Post?    @relation(fields: [postId], references: [id])
+  commentId  String?
+  comment    Comment? @relation(fields: [commentId], references: [id])
+
+  createdAt  DateTime @default(now())
+
+  // prevent double-liking
+  @@unique([userId, postId])
+  @@unique([userId, commentId])
+  @@index([postId])
+  @@index([commentId])
+}
+
+model Photo {
+  id           String   @id @default(uuid())
+  uploaderId   String?
+  uploader     User?    @relation(fields: [uploaderId], references: [id])
+
+  // If attaching to a post/gallery
+  postId       String?
+  post         Post?    @relation(fields: [postId], references: [id])
+
+  // Cloudinary fields
+  url          String
+  publicId     String   // Cloudinary public_id
+  width        Int?
+  height       Int?
+  caption      String?
+
+  createdAt    DateTime @default(now())
+
+  @@index([postId])
+}
+
