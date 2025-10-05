@@ -2,11 +2,12 @@ import Header from '../components/Header';
 import { prisma } from '../../lib/prisma';
 import Link from 'next/link';
 
-export default async function BlogPage() {
-  // Fetch posts from database (excluding archived posts)
-  const posts = await prisma.post.findMany({
+export default async function ArchivePage() {
+  // Fetch archived posts from database
+  const archivedPosts = await prisma.post.findMany({
     where: { 
-      published: true
+      published: true,
+      archived: true 
     },
     orderBy: { createdAt: 'desc' },
     include: {
@@ -21,43 +22,50 @@ export default async function BlogPage() {
       <Header />
 
       <section className="max-w-4xl mx-auto py-12 px-4">
-        <div className="flex items-center justify-between mb-6">
-          <h1 className="text-4xl font-poppins text-gray-900">Blog</h1>
-          <Link 
-            href="/archive" 
-            className="text-[#A85A52] hover:text-[#8B4540] font-medium transition-colors flex items-center gap-2"
-          >
-            <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.746 0 3.332.477 4.5 1.253v13C19.832 18.477 18.246 18 16.5 18c-1.746 0-3.332.477-4.5 1.253" />
-            </svg>
-            View Archive
-          </Link>
+        <div className="mb-8">
+          <h1 className="text-4xl font-poppins mb-4 text-gray-900">Archive</h1>
+          <p className="text-lg text-gray-700 mb-6">
+            Explore our collection of archived posts from previous church activities and events.
+          </p>
+          <div className="flex items-center space-x-4">
+            <Link 
+              href="/blog" 
+              className="inline-flex items-center text-[#A85A52] hover:text-[#8B4540] transition-colors"
+            >
+              ← Back to Current Posts
+            </Link>
+          </div>
         </div>
         
-        {posts.length === 0 ? (
+        {archivedPosts.length === 0 ? (
           <div className="text-center py-12">
-            <p className="text-gray-600">No posts found. Check back soon for updates from our church community!</p>
-            <Link 
-              href="/admin/posts/new" 
-              className="inline-block mt-4 bg-gradient-to-r from-[#A85A52] to-[#8B4540] text-white px-6 py-2 rounded-lg hover:from-[#8B4540] hover:to-[#A85A52] transition-all duration-300"
-            >
-              Create First Post
-            </Link>
+            <div className="text-gray-400 mb-4">
+              <svg className="w-16 h-16 mx-auto" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1} d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" />
+              </svg>
+            </div>
+            <h3 className="text-xl font-medium text-gray-900 mb-2">No archived posts yet</h3>
+            <p className="text-gray-600">Archived posts will appear here when they are moved from the main blog.</p>
           </div>
         ) : (
           <div className="space-y-8">
-            {posts.map((post) => (
-              <article key={post.id} className="bg-white rounded-lg shadow-md p-6 border-l-4 border-[#A85A52]">
+            {archivedPosts.map((post) => (
+              <article key={post.id} className="bg-white rounded-lg shadow-md p-6 border-l-4 border-gray-400 opacity-90">
                 <div className="flex flex-col md:flex-row gap-6">
                   <div className="flex-1">
-                    <h2 className="text-2xl font-semibold text-gray-900 mb-2">
-                      <Link 
-                        href={`/blog/${post.id}`}
-                        className="hover:text-[#A85A52] transition-colors"
-                      >
-                        {post.title}
-                      </Link>
-                    </h2>
+                    <div className="flex items-center space-x-3 mb-3">
+                      <h2 className="text-2xl font-semibold text-gray-900">
+                        <Link 
+                          href={`/blog/${post.id}`}
+                          className="hover:text-[#A85A52] transition-colors"
+                        >
+                          {post.title}
+                        </Link>
+                      </h2>
+                      <span className="bg-gray-100 text-gray-600 text-xs px-2 py-1 rounded-full">
+                        Archived
+                      </span>
+                    </div>
                     <div className="flex items-center gap-4 text-sm text-gray-600 mb-3">
                       <span>{post.author?.name || 'Church Staff'}</span>
                       <span>•</span>

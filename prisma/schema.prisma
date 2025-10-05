@@ -40,6 +40,7 @@ model Post {
   title       String
   content     String    // markdown or plain text
   published   Boolean   @default(true)
+  archived    Boolean   @default(false) // for archive functionality
   // denormalized counters you can maintain later if you want speed:
   // commentCount Int @default(0)
   // likeCount    Int @default(0)
@@ -54,6 +55,7 @@ model Post {
 
   @@index([authorId])
   @@index([createdAt])
+  @@index([archived])
 }
 
 model Comment {

@@ -6,6 +6,7 @@ const postSchema = z.object({
   title: z.string().min(1, 'Title is required').max(200, 'Title must be less than 200 characters'),
   content: z.string().min(1, 'Content is required').max(10000, 'Content must be less than 10,000 characters'),
   published: z.boolean().default(true),
+  archived: z.boolean().default(false),
   authorId: z.string().uuid().optional().nullable(),
 });
 
@@ -81,6 +82,7 @@ export async function PUT(
         title: validatedData.title,
         content: validatedData.content,
         published: validatedData.published,
+        archived: validatedData.archived,
         authorId: validatedData.authorId,
       },
       include: {
@@ -171,6 +173,58 @@ export async function DELETE(
 
     return NextResponse.json(
       { error: 'Failed to delete post', details: 'Please try again.' },
+      { status: 500 }
+    );
+  }
+}
+
+// PATCH endpoint for archiving/unarchiving posts
+export async function PATCH(
+  req: NextRequest,
+  { params }: { params: Promise<{ id: string }> }
+) {
+  try {
+    const { id } = await params;
+    const body = await req.json();
+    
+    // Check if post exists
+    const existingPost = await db.findUniquePost({
+      where: { id },
+    });
+
+    if (!existingPost) {
+      return NextResponse.json(
+        { error: 'Post not found' },
+        { status: 404 }
+      );
+    }
+
+    // Toggle archive status
+    const updatedPost = await db.updatePost({
+      where: { id },
+      data: {
+        archived: body.archived,
+      },
+      include: {
+        author: {
+          select: {
+            id: true,
+            name: true,
+            email: true,
+          },
+        },
+      },
+    });
+
+    return NextResponse.json({ 
+      ok: true, 
+      post: updatedPost,
+      message: body.archived ? 'Post archived successfully' : 'Post unarchived successfully'
+    });
+  } catch (error) {
+    console.error('Error archiving post:', error);
+    return NextResponse.json(
+      { error: 'Failed to archive post' },
       { status: 500 }
     );
   }

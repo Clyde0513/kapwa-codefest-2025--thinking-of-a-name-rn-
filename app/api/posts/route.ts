@@ -6,6 +6,7 @@ const postSchema = z.object({
   title: z.string().min(1, 'Title is required').max(200, 'Title must be less than 200 characters'),
   content: z.string().min(1, 'Content is required').max(10000, 'Content must be less than 10,000 characters'),
   published: z.boolean().default(true),
+  archived: z.boolean().default(false),
   authorId: z.string().uuid().optional(),
 });
 
@@ -19,6 +20,7 @@ export async function POST(req: NextRequest) {
         title: validatedData.title,
         content: validatedData.content,
         published: validatedData.published,
+        archived: validatedData.archived,
         authorId: validatedData.authorId || null,
       },
       include: {
@@ -68,12 +70,14 @@ export async function GET(req: NextRequest) {
   try {
     const { searchParams } = new URL(req.url);
     const published = searchParams.get('published');
+    const archived = searchParams.get('archived');
     const limit = parseInt(searchParams.get('limit') || '10');
     const offset = parseInt(searchParams.get('offset') || '0');
 
     const posts = await db.findManyPosts({
       where: {
         published: published === 'true' ? true : published === 'false' ? false : undefined,
+        archived: archived === 'true' ? true : archived === 'false' ? false : undefined,
       },
       take: limit,
       skip: offset,
@@ -98,6 +102,7 @@ export async function GET(req: NextRequest) {
     const total = await db.countPosts({
       where: {
         published: published === 'true' ? true : published === 'false' ? false : undefined,
+        archived: archived === 'true' ? true : archived === 'false' ? false : undefined,
       },
     }) as number;
 

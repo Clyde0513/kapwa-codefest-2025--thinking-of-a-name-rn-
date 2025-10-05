@@ -9,6 +9,7 @@ interface Post {
   title: string;
   content: string;
   published: boolean;
+  archived: boolean;
   createdAt: string;
   author?: {
     name: string;
@@ -20,6 +21,8 @@ export default function PostsManagementPage() {
   const [posts, setPosts] = useState<Post[]>([]);
   const [loading, setLoading] = useState(true);
   const [deleting, setDeleting] = useState<string | null>(null);
+  const [archiving, setArchiving] = useState<string | null>(null);
+  const [filter, setFilter] = useState<'all' | 'published' | 'draft' | 'archived'>('all');
   const router = useRouter();
 
   useEffect(() => {
@@ -37,6 +40,33 @@ export default function PostsManagementPage() {
       console.error('Error fetching posts:', error);
     } finally {
       setLoading(false);
+    }
+  };
+
+  const handleArchive = async (postId: string, currentArchived: boolean) => {
+    setArchiving(postId);
+    try {
+      const response = await fetch(`/api/posts/${postId}`, {
+        method: 'PATCH',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          archived: !currentArchived,
+        }),
+      });
+
+      if (response.ok) {
+        await fetchPosts();
+      } else {
+        const errorData = await response.json();
+        alert(`Failed to ${currentArchived ? 'unarchive' : 'archive'} post: ${errorData.error || 'Unknown error'}`);
+      }
+    } catch (error) {
+      console.error('Error archiving post:', error);
+      alert(`Failed to ${currentArchived ? 'unarchive' : 'archive'} post. Please try again.`);
+    } finally {
+      setArchiving(null);
     }
   };
 
@@ -67,6 +97,20 @@ export default function PostsManagementPage() {
       setDeleting(null);
     }
   };
+
+  // Filter posts based on selected filter
+  const filteredPosts = posts.filter(post => {
+    switch (filter) {
+      case 'published':
+        return post.published && !post.archived;
+      case 'draft':
+        return !post.published && !post.archived;
+      case 'archived':
+        return post.archived;
+      default:
+        return true;
+    }
+  });
 
   if (loading) {
     return (
@@ -122,11 +166,63 @@ export default function PostsManagementPage() {
             </div>
             <div className="flex space-x-4 text-sm">
               <div className="bg-green-100 text-green-800 px-3 py-1 rounded-full">
-                Published: {posts.filter(p => p.published).length}
+                Published: {posts.filter(p => p.published && !p.archived).length}
               </div>
               <div className="bg-yellow-100 text-yellow-800 px-3 py-1 rounded-full">
-                Drafts: {posts.filter(p => !p.published).length}
+                Drafts: {posts.filter(p => !p.published && !p.archived).length}
               </div>
+              <div className="bg-gray-100 text-gray-800 px-3 py-1 rounded-full">
+                Archived: {posts.filter(p => p.archived).length}
+              </div>
+            </div>
+          </div>
+        </div>
+
+        {/* Filter Tabs */}
+        <div className="bg-white rounded-lg shadow-sm border mb-6">
+          <div className="p-6 border-b">
+            <h2 className="text-lg font-semibold text-gray-900 mb-4">Filter Posts</h2>
+            <div className="flex space-x-4">
+              <button
+                onClick={() => setFilter('all')}
+                className={`px-4 py-2 rounded-lg font-medium transition-colors ${
+                  filter === 'all'
+                    ? 'bg-blue-600 text-white'
+                    : 'bg-gray-100 text-gray-700 hover:bg-gray-200'
+                }`}
+              >
+                All ({posts.length})
+              </button>
+              <button
+                onClick={() => setFilter('published')}
+                className={`px-4 py-2 rounded-lg font-medium transition-colors ${
+                  filter === 'published'
+                    ? 'bg-blue-600 text-white'
+                    : 'bg-gray-100 text-gray-700 hover:bg-gray-200'
+                }`}
+              >
+                Published ({posts.filter(p => p.published && !p.archived).length})
+              </button>
+              <button
+                onClick={() => setFilter('draft')}
+                className={`px-4 py-2 rounded-lg font-medium transition-colors ${
+                  filter === 'draft'
+                    ? 'bg-blue-600 text-white'
+                    : 'bg-gray-100 text-gray-700 hover:bg-gray-200'
+                }`}
+              >
+                Drafts ({posts.filter(p => !p.published && !p.archived).length})
+              </button>
+              <button
+                onClick={() => setFilter('archived')}
+                className={`px-4 py-2 rounded-lg font-medium transition-colors ${
+                  filter === 'archived'
+                    ? 'bg-blue-600 text-white'
+                    : 'bg-gray-100 text-gray-700 hover:bg-gray-200'
+                }`}
+              >
+                Archived ({posts.filter(p => p.archived).length})
+              </button>
             </div>
           </div>
         </div>
@@ -134,10 +230,14 @@ export default function PostsManagementPage() {
         {/* Posts List */}
         <div className="bg-white rounded-lg shadow-sm border">
           <div className="p-6 border-b">
-            <h2 className="text-lg font-semibold text-gray-900">All Blog Posts</h2>
+            <h2 className="text-lg font-semibold text-gray-900">
+              {filter === 'all' ? 'All Blog Posts' : 
+               filter === 'published' ? 'Published Posts' :
+               filter === 'draft' ? 'Draft Posts' : 'Archived Posts'}
+            </h2>
           </div>
           <div className="divide-y divide-gray-200">
-            {posts.length === 0 ? (
+            {filteredPosts.length === 0 ? (
               <div className="p-8 text-center">
                 <div className="text-gray-400 mb-4">
                   <svg className="w-12 h-12 mx-auto" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -154,15 +254,25 @@ export default function PostsManagementPage() {
                 </Link>
               </div>
             ) : (
-              posts.map((post) => (
+              filteredPosts.map((post) => (
                 <div key={post.id} className="p-6 hover:bg-gray-50 transition-colors">
                   <div className="flex items-center justify-between">
                     <div className="flex-1">
                       <div className="flex items-center space-x-3 mb-2">
                         <h3 className="text-lg font-medium text-gray-900">{post.title}</h3>
-                        {!post.published && (
+                        {post.archived && (
+                          <span className="bg-gray-100 text-gray-800 text-xs px-2 py-1 rounded-full">
+                            Archived
+                          </span>
+                        )}
+                        {!post.published && !post.archived && (
                           <span className="bg-yellow-100 text-yellow-800 text-xs px-2 py-1 rounded-full">
                             Draft
+                          </span>
+                        )}
+                        {post.published && !post.archived && (
+                          <span className="bg-green-100 text-green-800 text-xs px-2 py-1 rounded-full">
+                            Published
                           </span>
                         )}
                       </div>
@@ -189,6 +299,17 @@ export default function PostsManagementPage() {
                       >
                         View
                       </Link>
+                      <button
+                        onClick={() => handleArchive(post.id, post.archived)}
+                        disabled={archiving === post.id}
+                        className={`text-sm font-medium transition-colors ${
+                          post.archived 
+                            ? 'text-green-600 hover:text-green-700 disabled:text-green-400'
+                            : 'text-orange-600 hover:text-orange-700 disabled:text-orange-400'
+                        }`}
+                      >
+                        {archiving === post.id ? 'Processing...' : post.archived ? 'Unarchive' : 'Archive'}
+                      </button>
                       <button
                         onClick={() => handleDelete(post.id, post.title)}
                         disabled={deleting === post.id}

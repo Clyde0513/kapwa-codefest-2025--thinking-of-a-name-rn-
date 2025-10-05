@@ -35,11 +35,11 @@ export default function Header() {
 
   return (
     <header className="bg-gradient-to-r from-[#7A0000] to-[#A01010] text-white top-0 z-50 shadow-xl border-b border-white/10">
-      <div className="max-w-[1400px] mx-auto px-8 lg:px-16">
-        <div className="flex justify-between items-center py-4">
+      <div className="max-w-[1600px] mx-auto px-8 lg:px-20">
+        <div className="flex justify-between items-center py-6">
           {/* Logo with Text Below - Left Side */}
-          <Link href="/" className="flex flex-col items-center gap-1 hover:opacity-90 transition-opacity">
-            <div className="w-24 h-24 sm:w-28 sm:h-28 relative flex-shrink-0 drop-shadow-lg -translate-x-2">
+          <Link href="/" className="flex flex-col items-center gap-2 hover:opacity-90 transition-opacity">
+            <div className="w-24 h-24 sm:w-28 sm:h-28 relative flex-shrink-0 drop-shadow-lg">
               <Image
                 src="/images/tiwalaupdated.png"
                 alt={`${siteName} Logo`}
@@ -49,7 +49,7 @@ export default function Header() {
                 priority
               />
             </div>
-            <div className="text-center mt-1">
+            <div className="text-center">
               <h1 className="font-poppins font-semibold text-base sm:text-lg leading-tight text-white tracking-wide">
                 {firstPart}
               </h1>
@@ -59,10 +59,10 @@ export default function Header() {
 
           {/* Desktop Navigation - Centered */}
           <nav className="hidden lg:flex flex-1 justify-center">
-            <ul className="flex items-center gap-12">
+            <ul className="flex items-center gap-16">
               <li className="group">
                 <Link href="/mission" className="font-poppins text-lg font-light text-white/95 hover:text-white transition-all flex items-center gap-1.5 group-hover:scale-105 transform duration-200">
-                  Mission Statement
+                  Mission
                   {/* <svg className="w-4 h-4 opacity-75 group-hover:opacity-100 transition-opacity" fill="currentColor" viewBox="0 0 20 20">
                     <path fillRule="evenodd" d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z" clipRule="evenodd" />
                   </svg> */}
@@ -92,12 +92,22 @@ export default function Header() {
                   </svg> */}
                 </Link>
               </li>
+              <li className="group">
+                <Link href="/blog" className="font-poppins text-lg font-light text-white/95 hover:text-white transition-all flex items-center gap-1.5 group-hover:scale-105 transform duration-200">
+                  Blog
+                </Link>
+              </li>
+              <li className="group">
+                <Link href="/archive" className="font-poppins text-lg font-light text-white/95 hover:text-white transition-all flex items-center gap-1.5 group-hover:scale-105 transform duration-200">
+                  Archive
+                </Link>
+              </li>
             </ul>
           </nav>
 
           {/* Email Icon + Contact Us + Admin Login - Top Right */}
-          <div className="hidden lg:flex items-center gap-6">
-            <div className="flex items-center gap-3 group hover:scale-105 transform transition-all duration-200">
+          <div className="hidden lg:flex items-center gap-12">
+            <div className="flex items-center gap-4 group hover:scale-105 transform transition-all duration-200">
               <div className="w-10 h-10 bg-white rounded-full flex items-center justify-center shadow-lg group-hover:shadow-xl transition-shadow">
                 <svg className="w-5 h-5 text-gray-700" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3 8l7.89 4.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z" />
@@ -113,7 +123,7 @@ export default function Header() {
             
             <Link 
               href="/admin/login" 
-              className="bg-white/20 hover:bg-white/30 text-white font-poppins font-medium px-4 py-2 rounded-full transition-all duration-200 border border-white/30 hover:border-white/50"
+              className="bg-white/20 hover:bg-white/30 text-white font-poppins font-medium px-6 py-3 rounded-full transition-all duration-200 border border-white/30 hover:border-white/50"
             >
               Admin Login
             </Link>
@@ -137,11 +147,11 @@ export default function Header() {
 
         {/* Mobile Navigation */}
         {isMenuOpen && (
-          <nav className="lg:hidden pb-4">
-            <ul className="flex flex-col gap-4">
+          <nav className="lg:hidden pb-6">
+            <ul className="flex flex-col gap-6">
               <li>
                 <Link href="/mission" className="block font-poppins font-medium hover:text-gray-200 transition-colors">
-                  Mission Statement
+                  Mission
                 </Link>
               </li>
               <li>
@@ -157,6 +167,16 @@ export default function Header() {
               <li>
                 <Link href="/#events" className="block font-poppins font-medium hover:text-gray-200 transition-colors">
                   Events
+                </Link>
+              </li>
+              <li>
+                <Link href="/blog" className="block font-poppins font-medium hover:text-gray-200 transition-colors">
+                  Blog
+                </Link>
+              </li>
+              <li>
+                <Link href="/archive" className="block font-poppins font-medium hover:text-gray-200 transition-colors">
+                  Archive
                 </Link>
               </li>
               <li>
